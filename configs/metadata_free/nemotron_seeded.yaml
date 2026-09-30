@@ -1,0 +1,75 @@
+# Run cell `nemotron_seeded`: Nemotron pool, non-blank seed.
+#
+# `meta_filter.cli run --config` reads the nested keys below (the shape of
+# configs/default.yaml). Everything the CLI has no config key for is under
+# `launch:`, which the CLI ignores and `scripts/run_metadata_free.py` turns
+# into flags. The four cells differ only in `paths.train_data`,
+# `paths.initial_filter`, `paths.memory_dir`, `launch.cell`, `launch.pool`
+# and (DSv4Pro only) `launch.seeded_pools`; every other value is shared
+# (tests/test_metadata_free.py holds that). Run a cell through
+# `scripts/run_metadata_free.py`; `--config` alone does not carry `launch:`.
+
+seed: 29
+iterations: 20
+candidates_per_iteration: 3
+
+llm:
+  provider: codex
+  model: openai/gpt-5.6-sol-pro
+  temperature: 0.4
+
+paths:
+  initial_filter: filters/initial_ranking_nometa
+  train_data: data/nemotron_train50.jsonl
+  validation_data: data/demo_validation.jsonl
+  runs_dir: runs
+  memory_dir: memory/nemotron_seeded_s29
+
+validator:
+  loss_weights:
+    lambda_fn: 5.0
+    lambda_fp: 4.0
+    lambda_review: 0.5
+    lambda_cost: 0.1
+    lambda_complexity: 0.05
+
+boundary:
+  confidence_threshold: 0.55
+  score_margin: 1.0
+
+launch:
+  cell: nemotron_seeded
+  # Flags without a config key, shared by all four cells. One flag per line:
+  # the launcher appends them verbatim after `--config` and `--run-id`.
+  # `--complexity-ceiling` is the run hard cap: no candidate may exceed 9
+  # rubric criteria, 13 rules, 522 rules.py lines or 8785 rubric characters.
+  args:
+    - [--pair-evidence, "4"]
+    - [--redundancy-penalty, "0.5"]
+    - [--redundancy-threshold, "0.7"]
+    - [--solver-backend, llm]
+    - [--solver-provider, openai]
+    - [--solver-model, openai/gpt-5.6-luna]
+    - [--solver-cache-dir, data/scorer_cache]
+    - [--solver-parallel, "8"]
+    - [--judge-provider, openai]
+    - [--judge-model, openai/gpt-5.6-luna]
+    - [--judge-cache-dir, data/judge_cache]
+    - [--pair-judge-cache-dir, data/pair_judge_cache]
+    - [--judge-parallel, "8"]
+    - [--pair-budget, "50"]
+    - [--max-pairs, "1225"]
+    - [--exclude-consensus]
+    - [--consensus-audit-share, "0.25"]
+    - [--patience, "5"]
+    - [--min-iterations, "4"]
+    - [--proposer-score-budget, "4.00"]
+    - [--complexity-ceiling, "rubric_criteria=9,rule_count=13,rules_loc=522,rubric_chars=8785"]
+    - [--verbose]
+  # Per-cell pools; the train pool is `paths.train_data` above.
+  pool:
+    probe: data/nemotron_probe25.jsonl
+    selection_data: data/nemotron_selection220.jsonl
+    # Judged on rows that never carried a label, so the run accepts it as it
+    # is, once its rows file matches the recorded sha256 (README.md).
+    selection_set: data/nemotron_selection220_judged.json

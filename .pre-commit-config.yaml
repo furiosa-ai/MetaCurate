@@ -1,0 +1,57 @@
+# The seed filters and the test fixtures are data whose bytes are pinned
+# (prompts, cache keys); no hook may rewrite them.
+exclude: ^(filters/|tests/fixtures/)
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: check-json
+        exclude: \.ipynb$
+      - id: check-toml
+      - id: check-ast
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-added-large-files
+        args: [--maxkb=10240]
+      - id: detect-private-key
+      - id: debug-statements
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.22.1
+    hooks:
+      - id: gitleaks
+        # go-re2 v1.8.0 panics inside gitleaks on some runners. Keep the hook
+        # available for `pre-commit run --hook-stage manual gitleaks` as a
+        # manual sweep, but out of the default stage set so CI doesn't crash.
+        stages: [manual]
+
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.8.1
+    hooks:
+      - id: nbstripout
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [-d, relaxed]
+
+  - repo: https://github.com/compilerla/conventional-pre-commit
+    rev: v4.0.0
+    hooks:
+      - id: conventional-pre-commit
+        stages: [commit-msg]
+        args: [add, update, fix, exp, data, eval, feat, refactor, test, docs, chore, perf]

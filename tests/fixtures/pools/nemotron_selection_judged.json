@@ -1,0 +1,225 @@
+{
+  "row_ids": [
+    "nemotron.selection-0000-4ac4362c",
+    "nemotron.selection-0001-974b0ef9",
+    "nemotron.selection-0002-43cad59d",
+    "nemotron.selection-0003-0c905c5e",
+    "nemotron.selection-0004-ef43c026",
+    "nemotron.selection-0005-2f6637aa",
+    "nemotron.selection-0006-a5376766",
+    "nemotron.selection-0007-aa838976",
+    "nemotron.selection-0008-f7f8414c",
+    "nemotron.selection-0009-6eced8ab"
+  ],
+  "pairs": [
+    [
+      "nemotron.selection-0002-43cad59d",
+      "nemotron.selection-0000-4ac4362c"
+    ],
+    [
+      "nemotron.selection-0003-0c905c5e",
+      "nemotron.selection-0000-4ac4362c"
+    ],
+    [
+      "nemotron.selection-0005-2f6637aa",
+      "nemotron.selection-0000-4ac4362c"
+    ],
+    [
+      "nemotron.selection-0008-f7f8414c",
+      "nemotron.selection-0000-4ac4362c"
+    ],
+    [
+      "nemotron.selection-0007-aa838976",
+      "nemotron.selection-0000-4ac4362c"
+    ],
+    [
+      "nemotron.selection-0000-4ac4362c",
+      "nemotron.selection-0006-a5376766"
+    ],
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0000-4ac4362c"
+    ],
+    [
+      "nemotron.selection-0004-ef43c026",
+      "nemotron.selection-0000-4ac4362c"
+    ],
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0002-43cad59d"
+    ],
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0003-0c905c5e"
+    ],
+    [
+      "nemotron.selection-0006-a5376766",
+      "nemotron.selection-0001-974b0ef9"
+    ],
+    [
+      "nemotron.selection-0000-4ac4362c",
+      "nemotron.selection-0009-6eced8ab"
+    ],
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0007-aa838976"
+    ],
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0005-2f6637aa"
+    ],
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0009-6eced8ab"
+    ],
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0008-f7f8414c"
+    ],
+    [
+      "nemotron.selection-0004-ef43c026",
+      "nemotron.selection-0002-43cad59d"
+    ],
+    [
+      "nemotron.selection-0002-43cad59d",
+      "nemotron.selection-0003-0c905c5e"
+    ],
+    [
+      "nemotron.selection-0002-43cad59d",
+      "nemotron.selection-0006-a5376766"
+    ],
+    [
+      "nemotron.selection-0002-43cad59d",
+      "nemotron.selection-0008-f7f8414c"
+    ],
+    [
+      "nemotron.selection-0003-0c905c5e",
+      "nemotron.selection-0005-2f6637aa"
+    ],
+    [
+      "nemotron.selection-0002-43cad59d",
+      "nemotron.selection-0009-6eced8ab"
+    ],
+    [
+      "nemotron.selection-0004-ef43c026",
+      "nemotron.selection-0003-0c905c5e"
+    ],
+    [
+      "nemotron.selection-0003-0c905c5e",
+      "nemotron.selection-0007-aa838976"
+    ],
+    [
+      "nemotron.selection-0002-43cad59d",
+      "nemotron.selection-0007-aa838976"
+    ],
+    [
+      "nemotron.selection-0003-0c905c5e",
+      "nemotron.selection-0006-a5376766"
+    ],
+    [
+      "nemotron.selection-0003-0c905c5e",
+      "nemotron.selection-0008-f7f8414c"
+    ],
+    [
+      "nemotron.selection-0003-0c905c5e",
+      "nemotron.selection-0009-6eced8ab"
+    ],
+    [
+      "nemotron.selection-0008-f7f8414c",
+      "nemotron.selection-0004-ef43c026"
+    ],
+    [
+      "nemotron.selection-0006-a5376766",
+      "nemotron.selection-0004-ef43c026"
+    ],
+    [
+      "nemotron.selection-0007-aa838976",
+      "nemotron.selection-0004-ef43c026"
+    ],
+    [
+      "nemotron.selection-0004-ef43c026",
+      "nemotron.selection-0005-2f6637aa"
+    ],
+    [
+      "nemotron.selection-0005-2f6637aa",
+      "nemotron.selection-0009-6eced8ab"
+    ],
+    [
+      "nemotron.selection-0007-aa838976",
+      "nemotron.selection-0006-a5376766"
+    ],
+    [
+      "nemotron.selection-0006-a5376766",
+      "nemotron.selection-0005-2f6637aa"
+    ],
+    [
+      "nemotron.selection-0007-aa838976",
+      "nemotron.selection-0005-2f6637aa"
+    ],
+    [
+      "nemotron.selection-0004-ef43c026",
+      "nemotron.selection-0009-6eced8ab"
+    ],
+    [
+      "nemotron.selection-0008-f7f8414c",
+      "nemotron.selection-0005-2f6637aa"
+    ],
+    [
+      "nemotron.selection-0009-6eced8ab",
+      "nemotron.selection-0006-a5376766"
+    ],
+    [
+      "nemotron.selection-0008-f7f8414c",
+      "nemotron.selection-0006-a5376766"
+    ],
+    [
+      "nemotron.selection-0007-aa838976",
+      "nemotron.selection-0008-f7f8414c"
+    ],
+    [
+      "nemotron.selection-0007-aa838976",
+      "nemotron.selection-0009-6eced8ab"
+    ],
+    [
+      "nemotron.selection-0008-f7f8414c",
+      "nemotron.selection-0009-6eced8ab"
+    ]
+  ],
+  "tied": [
+    [
+      "nemotron.selection-0001-974b0ef9",
+      "nemotron.selection-0004-ef43c026"
+    ],
+    [
+      "nemotron.selection-0002-43cad59d",
+      "nemotron.selection-0005-2f6637aa"
+    ]
+  ],
+  "unresolved": [],
+  "provenance": {
+    "n_requested": 45,
+    "seed": null,
+    "stratified": false,
+    "n_hard": 0,
+    "n_uniform": 45,
+    "pairs_mode": "all",
+    "rows_file": "tests/fixtures/pools/nemotron_selection.jsonl",
+    "rows_sha256": "e3c62a531c92783d761d25716f5229d9133e802b5469a00a2ce1fdc878b915a7",
+    "n_rows": 10,
+    "exclude": [
+      "tests/fixtures/pools/nemotron_train.jsonl",
+      "tests/fixtures/pools/nemotron_probe.jsonl"
+    ],
+    "builder": "scripts.build_selection_set",
+    "seed_set": null,
+    "n_carried": 0,
+    "pairs_from": null,
+    "n_planned": 45,
+    "n_resolved": 43,
+    "n_tied": 2,
+    "n_unresolved": 0,
+    "tie_share": 0.0444,
+    "judge_model": "mock-1",
+    "built_at": "2026-09-30T02:43:01+00:00"
+  }
+}

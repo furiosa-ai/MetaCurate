@@ -1,0 +1,110 @@
+# Test fixture: a policy that declares six criteria and reads four of them.
+#
+# `Query/PR Quality` and `Gold-Patch Relation` stay in RUBRIC_CRITERIA but no
+# line below reads them, so they are scored on every row and change nothing.
+
+from __future__ import annotations
+
+RUBRIC_CRITERIA = [
+    "Task Grounding",
+    "Query/PR Quality",
+    "Gold-Patch Relation",
+    "Edit Justification",
+    "Verification Completeness",
+    "Error Recovery",
+]
+
+VETO_PENALTY = 4.0
+VETO_CAP = 2
+WORST_FLOOR = -2.0
+WORST_PENALTY = 3.0
+ACCEPT_SCORE = 65.0
+
+
+def _criterion(rubric_scores, name):
+    try:
+        return float((rubric_scores or {}).get(name, 0.0))
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _confirmed_rejects(rejecting, rubric_scores):
+    confirmation_axis = {
+        "rule_nemotron_lost_in_exploration": ("Task Grounding", 0.0),
+        "rule_nemotron_edit_test_loop": ("Error Recovery", 0.0),
+        "rule_nemotron_no_verification": ("Verification Completeness", 0.0),
+        "rule_no_post_edit_verification": ("Verification Completeness", 0.0),
+    }
+    confirmed = []
+    contradicted = []
+    for name in rejecting:
+        check = confirmation_axis.get(name)
+        if check is None or _criterion(rubric_scores, check[0]) <= check[1]:
+            confirmed.append(name)
+        else:
+            contradicted.append(name)
+    return confirmed, contradicted
+
+
+def decide(trajectory, rubric_scores, triggered_rules):
+    evidence: list[str] = []
+    rejecting: list[str] = []
+    for rule in triggered_rules or []:
+        name = rule.get("name", "?")
+        evidence.extend(f"[rule:{name}] {e}" for e in rule.get("evidence") or [])
+        if (rule.get("verdict") or "").upper() == "REJECT":
+            rejecting.append(name)
+
+    grounding = _criterion(rubric_scores, "Task Grounding")
+    justification = _criterion(rubric_scores, "Edit Justification")
+    verification = _criterion(rubric_scores, "Verification Completeness")
+    recovery = _criterion(rubric_scores, "Error Recovery")
+    values = [grounding, justification, verification, recovery]
+    worst = min(values)
+
+    score = (
+        30.0
+        + grounding * 10.0
+        + justification * 6.0
+        + verification * 2.0
+        + recovery
+    )
+    evidence.append(
+        f"[score] base {score:+.1f} from grounding {grounding:+.0f}*10, "
+        f"edit justification {justification:+.0f}*6, verification "
+        f"{verification:+.0f}*2, and recovery {recovery:+.0f}*1"
+    )
+    confirmed, contradicted = _confirmed_rejects(rejecting, rubric_scores)
+    if confirmed:
+        counted = min(len(confirmed), VETO_CAP)
+        score -= VETO_PENALTY * counted
+        evidence.append(
+            f"[score] -{VETO_PENALTY * counted:.0f} from {counted} rejecting "
+            f"rule(s) confirmed by the matching semantic axis: "
+            f"{', '.join(confirmed[:VETO_CAP])}"
+        )
+    if contradicted:
+        evidence.append(
+            "[score] no veto penalty for transcript proxy/proxies contradicted "
+            f"by positive semantic review: {', '.join(contradicted)}"
+        )
+    if values and worst <= WORST_FLOOR:
+        score -= WORST_PENALTY
+        evidence.append(
+            f"[score] -{WORST_PENALTY:.0f} worst criterion at the {WORST_FLOOR:+.0f} floor"
+        )
+    score = max(0.0, min(100.0, score))
+
+    decision = "ACCEPT" if score >= ACCEPT_SCORE else "REJECT"
+    confidence = round(min(0.95, 0.5 + abs(score - ACCEPT_SCORE) / 70.0), 3)
+    return {
+        "decision": decision,
+        "score": round(score, 2),
+        "confidence": confidence,
+        "reasoning_summary": (
+            f"score {score:.1f} (grounding={grounding:+.0f}, "
+            f"justification={justification:+.0f}, "
+            f"confirmed_vetoes={len(confirmed)}, contradicted_vetoes={len(contradicted)})"
+        ),
+        "evidence": evidence,
+    }

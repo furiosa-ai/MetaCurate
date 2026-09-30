@@ -1,0 +1,34 @@
+# Default configuration for `python -m meta_filter run` (the offline mock demo).
+# Every key can be overridden on the CLI (see `python -m meta_filter run --help`);
+# the four run cells in configs/metadata_free/ use the same keys.
+
+seed: 17
+
+iterations: 3
+candidates_per_iteration: 3
+
+llm:
+  provider: mock          # mock | openai | anthropic | codex | claude-code
+  model: null
+  temperature: 0.4
+
+paths:
+  initial_filter: filters/initial_blank_wired_v2
+  train_data: data/demo_train.jsonl
+  validation_data: data/demo_validation.jsonl
+  runs_dir: runs
+  memory_dir: memory
+
+boundary:
+  confidence_threshold: 0.55
+  score_margin: 1.0
+
+validator:
+  # Weights of the reported scalar loss (`summary.csv`'s `loss` column). The
+  # selection objective is `metrics.DEFAULT_SCORE_WEIGHTS`.
+  loss_weights:
+    lambda_fn: 5.0
+    lambda_fp: 4.0
+    lambda_review: 0.5
+    lambda_cost: 0.1
+    lambda_complexity: 0.05

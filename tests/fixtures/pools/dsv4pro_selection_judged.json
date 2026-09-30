@@ -1,0 +1,226 @@
+{
+  "row_ids": [
+    "traj_01c0eb6516aa2e26",
+    "traj_0ab0cead61582d94",
+    "traj_25392eee075d576a",
+    "traj_4d2ea942b1205415",
+    "traj_4ddd5ae6d458fbe1",
+    "traj_b768fdc58ccd9bca",
+    "traj_c61d7721f0324ed4",
+    "traj_cb172269e33fac91",
+    "traj_d0b1827139c5da78",
+    "traj_dd29f9b2b5161447"
+  ],
+  "pairs": [
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_0ab0cead61582d94"
+    ],
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_4d2ea942b1205415"
+    ],
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_cb172269e33fac91"
+    ],
+    [
+      "traj_d0b1827139c5da78",
+      "traj_01c0eb6516aa2e26"
+    ],
+    [
+      "traj_0ab0cead61582d94",
+      "traj_25392eee075d576a"
+    ],
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_25392eee075d576a"
+    ],
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_4ddd5ae6d458fbe1"
+    ],
+    [
+      "traj_0ab0cead61582d94",
+      "traj_4d2ea942b1205415"
+    ],
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_dd29f9b2b5161447"
+    ],
+    [
+      "traj_0ab0cead61582d94",
+      "traj_b768fdc58ccd9bca"
+    ],
+    [
+      "traj_0ab0cead61582d94",
+      "traj_d0b1827139c5da78"
+    ],
+    [
+      "traj_0ab0cead61582d94",
+      "traj_c61d7721f0324ed4"
+    ],
+    [
+      "traj_0ab0cead61582d94",
+      "traj_4ddd5ae6d458fbe1"
+    ],
+    [
+      "traj_d0b1827139c5da78",
+      "traj_25392eee075d576a"
+    ],
+    [
+      "traj_25392eee075d576a",
+      "traj_4d2ea942b1205415"
+    ],
+    [
+      "traj_4ddd5ae6d458fbe1",
+      "traj_25392eee075d576a"
+    ],
+    [
+      "traj_dd29f9b2b5161447",
+      "traj_25392eee075d576a"
+    ],
+    [
+      "traj_4d2ea942b1205415",
+      "traj_4ddd5ae6d458fbe1"
+    ],
+    [
+      "traj_dd29f9b2b5161447",
+      "traj_0ab0cead61582d94"
+    ],
+    [
+      "traj_4d2ea942b1205415",
+      "traj_c61d7721f0324ed4"
+    ],
+    [
+      "traj_4d2ea942b1205415",
+      "traj_cb172269e33fac91"
+    ],
+    [
+      "traj_b768fdc58ccd9bca",
+      "traj_25392eee075d576a"
+    ],
+    [
+      "traj_4d2ea942b1205415",
+      "traj_d0b1827139c5da78"
+    ],
+    [
+      "traj_25392eee075d576a",
+      "traj_cb172269e33fac91"
+    ],
+    [
+      "traj_4d2ea942b1205415",
+      "traj_b768fdc58ccd9bca"
+    ],
+    [
+      "traj_4ddd5ae6d458fbe1",
+      "traj_b768fdc58ccd9bca"
+    ],
+    [
+      "traj_4d2ea942b1205415",
+      "traj_dd29f9b2b5161447"
+    ],
+    [
+      "traj_4ddd5ae6d458fbe1",
+      "traj_cb172269e33fac91"
+    ],
+    [
+      "traj_4ddd5ae6d458fbe1",
+      "traj_d0b1827139c5da78"
+    ],
+    [
+      "traj_4ddd5ae6d458fbe1",
+      "traj_c61d7721f0324ed4"
+    ],
+    [
+      "traj_4ddd5ae6d458fbe1",
+      "traj_dd29f9b2b5161447"
+    ],
+    [
+      "traj_b768fdc58ccd9bca",
+      "traj_cb172269e33fac91"
+    ],
+    [
+      "traj_cb172269e33fac91",
+      "traj_c61d7721f0324ed4"
+    ],
+    [
+      "traj_b768fdc58ccd9bca",
+      "traj_c61d7721f0324ed4"
+    ],
+    [
+      "traj_c61d7721f0324ed4",
+      "traj_dd29f9b2b5161447"
+    ],
+    [
+      "traj_b768fdc58ccd9bca",
+      "traj_dd29f9b2b5161447"
+    ],
+    [
+      "traj_cb172269e33fac91",
+      "traj_d0b1827139c5da78"
+    ],
+    [
+      "traj_dd29f9b2b5161447",
+      "traj_cb172269e33fac91"
+    ],
+    [
+      "traj_dd29f9b2b5161447",
+      "traj_d0b1827139c5da78"
+    ]
+  ],
+  "tied": [
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_c61d7721f0324ed4"
+    ],
+    [
+      "traj_01c0eb6516aa2e26",
+      "traj_b768fdc58ccd9bca"
+    ],
+    [
+      "traj_0ab0cead61582d94",
+      "traj_cb172269e33fac91"
+    ],
+    [
+      "traj_25392eee075d576a",
+      "traj_c61d7721f0324ed4"
+    ],
+    [
+      "traj_b768fdc58ccd9bca",
+      "traj_d0b1827139c5da78"
+    ],
+    [
+      "traj_c61d7721f0324ed4",
+      "traj_d0b1827139c5da78"
+    ]
+  ],
+  "unresolved": [],
+  "provenance": {
+    "n_requested": 45,
+    "seed": null,
+    "stratified": false,
+    "n_hard": 0,
+    "n_uniform": 45,
+    "pairs_mode": "all",
+    "rows_file": "tests/fixtures/pools/dsv4pro_selection.jsonl",
+    "rows_sha256": "8bedb70d4d69d98f68143b3a61707ba44c4f03bed87d02cd726b72e82f24231b",
+    "n_rows": 10,
+    "exclude": [
+      "tests/fixtures/pools/dsv4pro_train.jsonl",
+      "tests/fixtures/pools/dsv4pro_probe.jsonl"
+    ],
+    "builder": "scripts.build_selection_set",
+    "seed_set": null,
+    "n_carried": 0,
+    "pairs_from": null,
+    "metadata_free": true,
+    "n_planned": 45,
+    "n_resolved": 39,
+    "n_tied": 6,
+    "n_unresolved": 0,
+    "tie_share": 0.1333,
+    "judge_model": "mock-1",
+    "built_at": "2026-09-30T02:43:01+00:00"
+  }
+}
