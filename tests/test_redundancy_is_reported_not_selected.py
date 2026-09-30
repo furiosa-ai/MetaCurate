@@ -234,7 +234,6 @@ def test_the_tool_using_mission_states_the_consequence():
 
 
 def test_the_criterion_health_block_names_the_score_the_pair_costs():
-
     from meta_filter.criterion_stats import render_criterion_health
 
     stats = {

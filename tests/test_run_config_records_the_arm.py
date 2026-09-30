@@ -120,7 +120,6 @@ def test_two_runs_differing_only_in_score_weight_write_different_configs(tmp_pat
 
 
 def test_the_ranking_knobs_are_recorded(tmp_path):
-
     cfg = _written_config(
         tmp_path,
         OptimizerConfig(
