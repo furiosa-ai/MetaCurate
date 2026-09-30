@@ -2,12 +2,20 @@
 
 from __future__ import annotations
 
-from functools import partial
+import os
 
-import pytest
+# Typer forces a colour terminal when these are set (GitHub Actions sets the
+# first), and the ANSI codes then split the CLI error text the tests match.
+# Read at import time, so they must go before anything imports typer.
+for _var in ("GITHUB_ACTIONS", "FORCE_COLOR", "PY_COLORS"):
+    os.environ.pop(_var, None)
 
-import meta_filter.optimizer as optimizer_module
-from meta_filter.critics import RubricCritic, RuleCritic
+from functools import partial  # noqa: E402
+
+import pytest  # noqa: E402
+
+import meta_filter.optimizer as optimizer_module  # noqa: E402
+from meta_filter.critics import RubricCritic, RuleCritic  # noqa: E402
 
 
 @pytest.fixture(autouse=True, scope="session")
