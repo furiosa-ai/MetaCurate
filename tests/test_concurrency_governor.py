@@ -57,6 +57,16 @@ def test_a_tiny_pod_still_gets_a_working_run_rather_than_a_refusal():
     assert plan.peak_calls <= plan.ceiling
 
 
+def test_an_iteration_with_no_candidates_left_does_not_divide_by_zero():
+    """Every proposal can fail precheck; the judge pool alone may still not fit."""
+
+    plan = concurrency.govern(candidates=0, solver=8, judge=8, limit_bytes=7 * GB, in_use_bytes=0)
+
+    assert plan.adjusted
+    assert plan.solver >= 1
+    assert plan.judge <= plan.ceiling
+
+
 def test_two_runs_sharing_a_machine_each_get_half_the_budget():
     """The startup snapshot cannot see a sibling that launched at the same
     moment — both would read `memory.current` before either had spawned a

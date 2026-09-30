@@ -170,7 +170,8 @@ def govern(
         )
 
     new_candidates = min(candidates, ceiling)
-    new_solver = max(1, min(solver, ceiling // new_candidates))
+    # `candidates` is 0 when every proposal failed precheck.
+    new_solver = max(1, min(solver, ceiling // max(1, new_candidates)))
     # A single candidate whose solver pool alone exceeds the ceiling is the
     # one case where candidates cannot absorb it.
     new_candidates = max(1, min(new_candidates, ceiling // new_solver))
