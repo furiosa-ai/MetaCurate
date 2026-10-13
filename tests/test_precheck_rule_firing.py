@@ -23,10 +23,10 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter import precheck as pc
-from meta_filter.filter_loader import load_filter
-from meta_filter.schemas import Trajectory, Turn
-from meta_filter.solver import ScorerCost
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.schemas import Trajectory, Turn
+from meta_filter.core.solver import ScorerCost
+from meta_filter.gate import precheck as pc
 
 ROOT = Path(__file__).resolve().parents[1]
 INITIAL_RANKING = ROOT / "tests" / "fixtures" / "filters" / "six_criteria"

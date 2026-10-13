@@ -9,9 +9,9 @@ so.
 
 from __future__ import annotations
 
-from meta_filter.agentic_proposer import _agentic_instructions
-from meta_filter.precheck import render_precheck_block
-from meta_filter.proposer import build_proposer_system
+from meta_filter.gate.precheck import render_precheck_block
+from meta_filter.propose.agentic_proposer import _agentic_instructions
+from meta_filter.propose.proposer import build_proposer_system
 from tests.proposer_prompt_fixture import render
 from tests.selection_gate_fixture import build_optimizer, prepare
 from tests.test_ranking_proposer_prompt_speaks_in_pairs import RANKING_STATE

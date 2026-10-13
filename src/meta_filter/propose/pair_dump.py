@@ -56,9 +56,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from meta_filter.pseudonym import Pseudonymizer
-from meta_filter.schemas import Trajectory
-from meta_filter.view_policy import pair_view_signature
+from meta_filter.core.schemas import Trajectory
+from meta_filter.visibility.pseudonym import Pseudonymizer
+from meta_filter.visibility.view_policy import pair_view_signature
 
 FILENAME = "ranking_pairs.jsonl"
 

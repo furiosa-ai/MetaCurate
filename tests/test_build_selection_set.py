@@ -11,8 +11,8 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.pair_judge import PairJudge
-from meta_filter.selection_set import SelectionSet
+from meta_filter.gate.pair_judge import PairJudge
+from meta_filter.gate.selection_set import SelectionSet
 from scripts import build_selection_set as bss
 from tests.selection_gate_fixture import TruthJudgeClient, truth_by_id, write_pool
 

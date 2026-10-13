@@ -2,9 +2,8 @@
 
 from pathlib import Path
 
-from meta_filter.filter_loader import load_filter, materialize_candidate
-from meta_filter.proposer import Proposer
-from meta_filter.schemas import (
+from meta_filter.core.filter_loader import load_filter, materialize_candidate
+from meta_filter.core.schemas import (
     CounterExample,
     Decision,
     FilterDecision,
@@ -12,6 +11,7 @@ from meta_filter.schemas import (
     Trajectory,
     Turn,
 )
+from meta_filter.propose.proposer import Proposer
 
 RUBRIC = "# Rubric\n\n## Criterion: Task Grounding\n+2 names the defect\n"
 RULES = "def rule_one(t):\n    return None\n"

@@ -7,11 +7,11 @@ an accident.
 
 from __future__ import annotations
 
+from meta_filter.core.rendering import DEFAULT_TRAJECTORY_TOOL_BUDGET, view_signature
+from meta_filter.core.schemas import Trajectory
 from meta_filter.critics.trajectory_critic import TrajectoryCritic
-from meta_filter.pair_judge import PAIR_TOOL_BUDGET, PairJudge
-from meta_filter.rendering import DEFAULT_TRAJECTORY_TOOL_BUDGET, view_signature
-from meta_filter.schemas import Trajectory
-from meta_filter.view_policy import VIEW_SIGNATURE_FIELDS, pair_view_signature
+from meta_filter.gate.pair_judge import PAIR_TOOL_BUDGET, PairJudge
+from meta_filter.visibility.view_policy import VIEW_SIGNATURE_FIELDS, pair_view_signature
 
 # sha1("f2p_pass,p2p_pass,resolved")[:8]: every stripped row lacks all three.
 STRIPPED_VIEW = "6fd64b73"

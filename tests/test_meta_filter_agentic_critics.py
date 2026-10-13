@@ -6,10 +6,10 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from meta_filter.core.schemas import Decision, Trajectory, Turn
 from meta_filter.critics.agentic import AgenticRubricCritic, AgenticTrajectoryCritic
 from meta_filter.llm.base import LLMResponse
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
-from meta_filter.schemas import Decision, Trajectory, Turn
 
 
 @dataclass

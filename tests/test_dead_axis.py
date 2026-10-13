@@ -16,9 +16,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from meta_filter.criterion_stats import DEAD_MODAL_SHARE
-from meta_filter.dead_axis import DEAD_LIFT_ABSOLUTE, check, render
-from meta_filter.filter_loader import load_filter
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.diagnostics.criterion_stats import DEAD_MODAL_SHARE
+from meta_filter.diagnostics.dead_axis import DEAD_LIFT_ABSOLUTE, check, render
 
 ROOT = Path(__file__).resolve().parents[1]
 

@@ -56,7 +56,7 @@ from typing import Any
 
 import yaml
 
-from meta_filter.schemas import Trajectory
+from meta_filter.core.schemas import Trajectory
 from meta_filter.score_tool import (
     EXIT_OK,
     EXIT_REFUSED,
@@ -67,7 +67,7 @@ from meta_filter.score_tool import (
     _pick_rows,
     _resolve,
 )
-from meta_filter.trajectory import load_trajectories
+from meta_filter.visibility.trajectory import load_trajectories
 
 logger = logging.getLogger(__name__)
 

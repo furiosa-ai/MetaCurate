@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from meta_filter.constraints import (
+from meta_filter.gate.constraints import (
     ConstraintLimits,
     check_candidate,
     newly_zero_weight_criteria,
@@ -88,7 +88,7 @@ def test_the_finding_is_not_a_claim_that_the_criterion_is_unused(tmp_path):
     about the weighted term paying nothing, not about the axis having no
     effect — a policy at a -2 floor really does react to it."""
 
-    from meta_filter.constraints import declared_unread_criteria
+    from meta_filter.gate.constraints import declared_unread_criteria
 
     zeroed = _filter(tmp_path / "z", ZEROED)
     assert zero_weight_criteria(zeroed) == ["Beta"]

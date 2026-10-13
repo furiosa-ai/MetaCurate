@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 
+from meta_filter.core.schemas import Decision, Trajectory
 from meta_filter.critics.trajectory_critic import (
     JUDGE_PROMPT,
     JUDGE_SYSTEM,
@@ -13,7 +14,6 @@ from meta_filter.critics.trajectory_critic import (
     _parse_judge_response,
 )
 from meta_filter.llm.base import LLMResponse
-from meta_filter.schemas import Decision, Trajectory
 
 
 @dataclass

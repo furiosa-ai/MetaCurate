@@ -28,7 +28,7 @@ import hashlib
 import json
 from collections.abc import Sequence
 
-from meta_filter.schemas import Trajectory, Turn
+from meta_filter.core.schemas import Trajectory, Turn
 
 # Bumped when the rendering *logic* changes in a way the constants below do
 # not capture — dropping a role, reordering turns, changing where a cut lands.

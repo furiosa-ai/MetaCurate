@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from meta_filter.proposal_shape import REWRITE_THRESHOLD, measure, report
+from meta_filter.propose.proposal_shape import REWRITE_THRESHOLD, measure, report
 
 BASELINE_RUBRIC = "\n".join(f"line {i}" for i in range(40))
 BASELINE_RULES = "\n".join(f"def rule_{i}(t): return None" for i in range(20))

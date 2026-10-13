@@ -24,8 +24,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from meta_filter import constraints as cx
-from meta_filter.criterion_stats import (
+from meta_filter.diagnostics.criterion_stats import (
     DEAD_AXIS_ACTION,
     REMOVAL_LICENCE,
     UNREAD_AXIS_ACTION,
@@ -33,8 +32,9 @@ from meta_filter.criterion_stats import (
     render_criterion_health,
     render_inert_axes,
 )
-from meta_filter.precheck import PrecheckResult, render_precheck_block
-from meta_filter.proposer import _format_loop_telemetry, render_edit_discipline
+from meta_filter.gate import constraints as cx
+from meta_filter.gate.precheck import PrecheckResult, render_precheck_block
+from meta_filter.propose.proposer import _format_loop_telemetry, render_edit_discipline
 
 REPO = Path(__file__).resolve().parents[1]
 FIXTURE_FILTERS = Path(__file__).parent / "fixtures" / "filters"

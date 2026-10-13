@@ -28,11 +28,11 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.filter_loader import load_filter
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.llm_scorer import LLMRubricScorer
+from meta_filter.core.solver import Solver
+from meta_filter.gate.selection_set import baseline_scores_path, score_on_selection
 from meta_filter.llm.base import LLMResponse
-from meta_filter.llm_scorer import LLMRubricScorer
-from meta_filter.selection_set import baseline_scores_path, score_on_selection
-from meta_filter.solver import Solver
 from tests.selection_gate_fixture import (
     TRUTH_POLICY,
     MetaScorer,

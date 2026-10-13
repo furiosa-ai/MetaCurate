@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from meta_filter.schemas import CounterExample, Decision
+from meta_filter.core.schemas import CounterExample, Decision
 
 
 class RegressionMemory:

@@ -25,13 +25,13 @@ import re
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from meta_filter.filter_loader import materialize_candidate
+from meta_filter.core.filter_loader import materialize_candidate
+from meta_filter.core.solver import ScorerCost, Solver
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
 from meta_filter.llm.base import LLMResponse
-from meta_filter.optimizer import Optimizer, OptimizerConfig
-from meta_filter.proposer import Proposer, ProposerResult
-from meta_filter.selector import Selector
-from meta_filter.solver import ScorerCost, Solver
-from meta_filter.validator import Validator
+from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+from meta_filter.propose.proposer import Proposer, ProposerResult
 
 RUBRIC = """# Rubric
 

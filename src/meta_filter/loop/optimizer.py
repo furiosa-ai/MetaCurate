@@ -26,73 +26,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from types import SimpleNamespace
 
-from meta_filter.complexity import measure_filter_complexity
-from meta_filter.concurrency import AdaptiveGovernor, MemorySampler
-from meta_filter.concurrency import log_plan as log_concurrency_plan
-from meta_filter.constraints import (
-    ConstraintLimits,
-    complexity_score,
-    declared_unread_criteria,
-    rubric_defects,
+from meta_filter.core.filter_loader import FilterValidationError, LoadedFilter, load_filter
+from meta_filter.core.llm_scorer import (
+    LLMRubricScorer,
+    cache_key_trajectory_id,
+    sanitize_trajectory_id,
 )
-from meta_filter.criterion_lift import (
-    render_criterion_signal,
-    single_criterion_concordance,
-    zero_lift_items,
-    zero_lift_note,
-)
-from meta_filter.criterion_stats import charge_redundancy, redundancy_penalty
-from meta_filter.critics import (
-    RubricCritic,
-    RubricCriticReport,
-    RuleCritic,
-    RuleCriticReport,
-    TrajectoryCritic,
-)
-from meta_filter.dead_axis import check as dead_axis_check
-from meta_filter.dead_axis import log as dead_axis_log
-from meta_filter.experience_store import ExperienceStore
-from meta_filter.filter_loader import FilterValidationError, LoadedFilter, load_filter
-from meta_filter.llm.base import UsageLimitError
-from meta_filter.llm.cost_meter import LEDGER as COST_LEDGER
-from meta_filter.llm.cost_meter import metered, unwrap
-from meta_filter.llm_scorer import LLMRubricScorer, cache_key_trajectory_id, sanitize_trajectory_id
-from meta_filter.memory import RegressionMemory
-from meta_filter.metadata_free import (
-    METADATA_FREE_TRAIN_FILE,
-    PSEUDONYM_SALT,
-    file_sha256,
-    filter_outcome_reads,
-    pseudonymize_selection_set,
-    selection_set_view,
-)
-from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
-from meta_filter.paired_test import (
-    critical_b_table,
-    one_sided_p_from_z,
-    pair_correctness,
-    paired_stats,
-    render_critical_b_table,
-    stats_from_counts,
-    z_threshold_for,
-)
-from meta_filter.probe import ProbeSet
-from meta_filter.probe import append_report as probe_append_report
-from meta_filter.probe import latest_decisions as probe_latest_decisions
-from meta_filter.probe import load_reports as probe_load_reports
-from meta_filter.probe import render_for_prompt as probe_render_for_prompt
-from meta_filter.proposal_shape import report as shape_report
-from meta_filter.proposer import (
-    PROMPT_MISORDER_PAIRS,
-    Proposer,
-    ProposerResult,
-    build_proposer_system,
-)
-from meta_filter.pseudonym import Pseudonymizer
-from meta_filter.ranking import DEGENERACY_PENALTY, default_min_distinct_levels
-from meta_filter.reports import render_iteration_report, unified_diff
-from meta_filter.resume import rebuild as resume_state
-from meta_filter.schemas import (
+from meta_filter.core.schemas import (
     CandidateEvaluation,
     CounterExample,
     Decision,
@@ -101,14 +41,43 @@ from meta_filter.schemas import (
     RunConfig,
     Trajectory,
 )
-from meta_filter.score_tool import (
-    ScoreBudgetLedger,
-    ScoreToolAccess,
-    access_for,
-    merge_staged_cells,
-    staging_dir_for,
+from meta_filter.core.solver import HeuristicRubricScorer, Solver
+from meta_filter.critics import (
+    RubricCritic,
+    RubricCriticReport,
+    RuleCritic,
+    RuleCriticReport,
+    TrajectoryCritic,
 )
-from meta_filter.selection_set import (
+from meta_filter.diagnostics.criterion_lift import (
+    render_criterion_signal,
+    single_criterion_concordance,
+    zero_lift_items,
+    zero_lift_note,
+)
+from meta_filter.diagnostics.criterion_stats import charge_redundancy, redundancy_penalty
+from meta_filter.diagnostics.dead_axis import check as dead_axis_check
+from meta_filter.diagnostics.dead_axis import log as dead_axis_log
+from meta_filter.gate.complexity import measure_filter_complexity
+from meta_filter.gate.constraints import (
+    ConstraintLimits,
+    complexity_score,
+    declared_unread_criteria,
+    rubric_defects,
+)
+from meta_filter.gate.memory import RegressionMemory
+from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
+from meta_filter.gate.paired_test import (
+    critical_b_table,
+    one_sided_p_from_z,
+    pair_correctness,
+    paired_stats,
+    render_critical_b_table,
+    stats_from_counts,
+    z_threshold_for,
+)
+from meta_filter.gate.ranking import DEGENERACY_PENALTY, default_min_distinct_levels
+from meta_filter.gate.selection_set import (
     PairCount,
     SelectionSet,
     assert_disjoint,
@@ -119,11 +88,46 @@ from meta_filter.selection_set import (
     selection_row_ids_in_text,
     selection_set_path,
 )
-from meta_filter.selector import STRONG_EXTRA_Z, SelectionResult, Selector
-from meta_filter.solver import HeuristicRubricScorer, Solver
-from meta_filter.trajectory import load_trajectories
-from meta_filter.validator import Validator
-from meta_filter.view_policy import pair_view_signature
+from meta_filter.gate.selector import STRONG_EXTRA_Z, SelectionResult, Selector
+from meta_filter.gate.validator import Validator
+from meta_filter.llm.base import UsageLimitError
+from meta_filter.llm.cost_meter import LEDGER as COST_LEDGER
+from meta_filter.llm.cost_meter import metered, unwrap
+from meta_filter.loop.concurrency import AdaptiveGovernor, MemorySampler
+from meta_filter.loop.concurrency import log_plan as log_concurrency_plan
+from meta_filter.loop.experience_store import ExperienceStore
+from meta_filter.loop.probe import ProbeSet
+from meta_filter.loop.probe import append_report as probe_append_report
+from meta_filter.loop.probe import latest_decisions as probe_latest_decisions
+from meta_filter.loop.probe import load_reports as probe_load_reports
+from meta_filter.loop.probe import render_for_prompt as probe_render_for_prompt
+from meta_filter.loop.reports import render_iteration_report, unified_diff
+from meta_filter.loop.resume import rebuild as resume_state
+from meta_filter.propose.proposal_shape import report as shape_report
+from meta_filter.propose.proposer import (
+    PROMPT_MISORDER_PAIRS,
+    Proposer,
+    ProposerResult,
+    build_proposer_system,
+)
+from meta_filter.score_tool import (
+    ScoreBudgetLedger,
+    ScoreToolAccess,
+    access_for,
+    merge_staged_cells,
+    staging_dir_for,
+)
+from meta_filter.visibility.metadata_free import (
+    METADATA_FREE_TRAIN_FILE,
+    PSEUDONYM_SALT,
+    file_sha256,
+    filter_outcome_reads,
+    pseudonymize_selection_set,
+    selection_set_view,
+)
+from meta_filter.visibility.pseudonym import Pseudonymizer
+from meta_filter.visibility.trajectory import load_trajectories
+from meta_filter.visibility.view_policy import pair_view_signature
 
 logger = logging.getLogger(__name__)
 
@@ -338,7 +342,7 @@ class Optimizer:
         self.train = load_trajectories(train_data)
         self.heldout = load_trajectories(validation_data) if validation_data else []
 
-        # The fixed probe set (see meta_filter.probe): constant data every
+        # The fixed probe set (see meta_filter.loop.probe): constant data every
         # iteration's winner is run on so drift is observable. Loaded here,
         # evaluated at the advance step, never part of selection.
         self.probe = ProbeSet.from_path(probe_data) if probe_data else None
@@ -651,7 +655,7 @@ class Optimizer:
         names the rest with the reason each one was held back.
         """
 
-        from meta_filter.precheck import render_precheck_block, run_precheck
+        from meta_filter.gate.precheck import render_precheck_block, run_precheck
 
         traj_by_id = {t.trajectory_id: t for t in active_train}
         pairs = self._evaluation_pairs(traj_by_id)
@@ -1114,10 +1118,10 @@ class Optimizer:
             # end-of-loop measurement raised.
             if not criterion_lift_line:
                 try:
-                    from meta_filter.criterion_lift import (
+                    from meta_filter.diagnostics.criterion_lift import (
                         measure_ranking as _measure_rank_lift,
                     )
-                    from meta_filter.criterion_lift import (
+                    from meta_filter.diagnostics.criterion_lift import (
                         render_ranking as _render_rank_lift,
                     )
 
@@ -1466,8 +1470,8 @@ class Optimizer:
             ranking_tied_pairs: list[tuple[str, str]] = []
             ranking_audit_keys: set[frozenset[str]] = set()
             ranking_pair_judge = None
-            from meta_filter import ranking as ranking_math
-            from meta_filter.pair_judge import PairJudge
+            from meta_filter.gate import ranking as ranking_math
+            from meta_filter.gate.pair_judge import PairJudge
 
             for cand_id, _, _, _, decisions in candidate_solver:
                 ranking_scores_by_cand[cand_id] = {
@@ -1791,8 +1795,8 @@ class Optimizer:
             # as DIAGNOSTICS for the critic and the operator, never scored:
             # rewarding a shape invites faking it with noise.
             ranking_diag: dict[str, dict] = {}
-            from meta_filter import ranking as ranking_math
-            from meta_filter.criterion_stats import criterion_stats
+            from meta_filter.diagnostics.criterion_stats import criterion_stats
+            from meta_filter.gate import ranking as ranking_math
 
             decisions_by_cand = {name: decs for (name, _, _, _, decs) in candidate_solver}
             min_levels = (
@@ -2462,10 +2466,10 @@ class Optimizer:
                 winner_decisions = next(
                     d for (n, _, _, _, d) in candidate_solver if n == result.winner
                 )
-                from meta_filter.criterion_lift import (
+                from meta_filter.diagnostics.criterion_lift import (
                     measure_ranking as _measure_rank_lift,
                 )
-                from meta_filter.criterion_lift import (
+                from meta_filter.diagnostics.criterion_lift import (
                     render_ranking as _render_rank_lift,
                 )
 
@@ -2496,7 +2500,7 @@ class Optimizer:
                 # Two of `initial_ranking`'s six were in that state for the
                 # whole labelled lineage while the evidence sat in this very
                 # file at 0.0085 and 0.0109, and in the criterion-health block
-                # at 99.5% and 94.5% modal share. See meta_filter.dead_axis.
+                # at 99.5% and 94.5% modal share. See meta_filter.diagnostics.dead_axis.
                 winner_diag = ranking_diag.get(result.winner) or {}
                 dead = dead_axis_check(
                     current.rubric_md,
@@ -2518,7 +2522,7 @@ class Optimizer:
             # concordance and score-distribution shape. Diagnostics, so the
             # proposer can see saturation or collapse; never part of the score.
             if ranking_diag:
-                from meta_filter.ranking import render_distribution
+                from meta_filter.gate.ranking import render_distribution
 
                 wd = ranking_diag.get(result.winner)
                 if wd:
@@ -2545,7 +2549,7 @@ class Optimizer:
                         + "\n"
                         + render_distribution(wd["distribution"])
                     )
-                    from meta_filter.criterion_stats import (
+                    from meta_filter.diagnostics.criterion_stats import (
                         dead_axes,
                         dead_axis_reasons,
                         render_criterion_health,
@@ -2681,9 +2685,9 @@ class Optimizer:
                     # same verdicts, so the curve is comparable.
                     validation_concordance = None
                     if probe_report.scores and backend is not None:
-                        from meta_filter.pair_judge import PairJudge
-                        from meta_filter.probe import fixed_validation_pairs
-                        from meta_filter.ranking import concordance as rank_concordance
+                        from meta_filter.gate.pair_judge import PairJudge
+                        from meta_filter.gate.ranking import concordance as rank_concordance
+                        from meta_filter.loop.probe import fixed_validation_pairs
 
                         fixed_pairs = fixed_validation_pairs(
                             [t.trajectory_id for t in self.probe.trajectories]
@@ -2801,7 +2805,7 @@ class Optimizer:
         is disk, for a proposer that goes looking.
         """
 
-        from meta_filter.pair_dump import FILENAME, ranking_pair_rows, write_ranking_pairs
+        from meta_filter.propose.pair_dump import FILENAME, ranking_pair_rows, write_ranking_pairs
 
         rows = ranking_pair_rows(
             accumulated_pairs=self._accumulated_pairs,
@@ -2836,7 +2840,7 @@ class Optimizer:
         because nothing has measured them yet when the run starts.
         """
 
-        from meta_filter.ranking import default_min_distinct_levels
+        from meta_filter.gate.ranking import default_min_distinct_levels
 
         return {
             "min_distinct_levels": (
@@ -3081,7 +3085,7 @@ class Optimizer:
         backend = getattr(self.validator, "critic_backend", None)
         if backend is None:
             raise RuntimeError("re-judging the selection set needs a judge backend")
-        from meta_filter.pair_judge import PairJudge
+        from meta_filter.gate.pair_judge import PairJudge
 
         planned = [*prebuilt.pairs, *prebuilt.tied, *prebuilt.unresolved]
         logger.info(
@@ -3197,7 +3201,7 @@ class Optimizer:
                 "selection_data was given but there is no judge backend to "
                 "adjudicate the selection pairs with"
             )
-        from meta_filter.pair_judge import PairJudge
+        from meta_filter.gate.pair_judge import PairJudge
 
         initial_scores = self._score_on_selection_rows(current)
         ids = [t.trajectory_id for t in self.selection_rows]
@@ -4032,8 +4036,8 @@ class Optimizer:
         touched. Empty without a judge or below `MIN_MISORDERED_PAIRS`.
         """
 
-        from meta_filter.ranking import missed_pairs
-        from meta_filter.rationale_themes import rationale_themes, render_rationale_themes
+        from meta_filter.gate.ranking import missed_pairs
+        from meta_filter.propose.rationale_themes import rationale_themes, render_rationale_themes
 
         if judge is None or not truth_pairs:
             return ""
@@ -4074,7 +4078,10 @@ class Optimizer:
         criterion moved is worth the most.
         """
 
-        from meta_filter.criterion_stats import criterion_stability, render_criterion_stability
+        from meta_filter.diagnostics.criterion_stats import (
+            criterion_stability,
+            render_criterion_stability,
+        )
 
         stability = criterion_stability(winning_cells, fresh_cells)
         payload = {"iteration": iteration, "candidate": candidate_id, **stability}
@@ -4937,7 +4944,7 @@ def _select_misordered_pairs(
     put in front of its lineage and the filter still inverts it.
     """
 
-    from meta_filter.ranking import missed_pairs
+    from meta_filter.gate.ranking import missed_pairs
 
     prov = provenance or {}
     seen = shown_before or {}
@@ -5005,7 +5012,7 @@ def _audit_blind_spot_pairs(
     the misordered-pair blocks render would repeat them exactly.
     """
 
-    from meta_filter.ranking import missed_pairs
+    from meta_filter.gate.ranking import missed_pairs
 
     skip = exclude or set()
     audit_pool = [
@@ -5294,7 +5301,7 @@ def _stub_metrics(total: int, decisions: list[FilterDecision]):
     the proposer relies on the file contents and memory, not on stale metrics.
     """
 
-    from meta_filter.schemas import FilterMetrics
+    from meta_filter.core.schemas import FilterMetrics
 
     counts = {"accepted": 0, "rejected": 0, "reviewed": 0}
     for d in decisions:
@@ -5333,7 +5340,7 @@ def _append_rule_pricing(line: str, loaded_filter, decisions, trajectories=None)
     deleted for being useless.
     """
 
-    from meta_filter.criterion_lift import render_rule_pricing, rule_pricing
+    from meta_filter.diagnostics.criterion_lift import render_rule_pricing, rule_pricing
 
     try:
         pricing = render_rule_pricing(rule_pricing(loaded_filter, decisions, trajectories))

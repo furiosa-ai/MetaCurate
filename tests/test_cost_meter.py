@@ -175,11 +175,11 @@ def test_replace_client_sees_through_the_meter_for_every_harness(tmp_path):
     With the meter in place every one of those would raise TypeError and kill
     a run at its first proposer call."""
 
-    from meta_filter.agentic_proposer import _with_tools
     from meta_filter.critics.agentic import _agentic
     from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
     from meta_filter.llm.codex_cli import CodexCliClient
     from meta_filter.llm.cost_meter import MeteredClient, metered, replace_client, unwrap
+    from meta_filter.propose.agentic_proposer import _with_tools
 
     for inner in (ClaudeCodeHeadlessClient(model="x"), CodexCliClient(model="y")):
         m = metered(inner, "proposer")

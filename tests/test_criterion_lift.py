@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from types import ModuleType, SimpleNamespace
 
-from meta_filter.criterion_lift import measure_ranking, render_ranking
-from meta_filter.schemas import FilterDecision, Trajectory
+from meta_filter.core.schemas import FilterDecision, Trajectory
+from meta_filter.diagnostics.criterion_lift import measure_ranking, render_ranking
 
 
 def _traj(tid: str) -> Trajectory:

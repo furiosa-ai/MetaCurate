@@ -16,11 +16,11 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter import precheck as pc
-from meta_filter.filter_loader import load_filter
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.llm_scorer import LLMRubricScorer
+from meta_filter.core.schemas import Trajectory, Turn
+from meta_filter.gate import precheck as pc
 from meta_filter.llm.base import LLMResponse
-from meta_filter.llm_scorer import LLMRubricScorer
-from meta_filter.schemas import Trajectory, Turn
 
 ROOT = Path(__file__).resolve().parents[1]
 INITIAL_RANKING = ROOT / "tests" / "fixtures" / "filters" / "six_criteria"
@@ -229,7 +229,7 @@ def test_a_rewritten_preamble_costs_every_cell(tmp_path, scorer, parent, rows):
 
 
 def test_a_scorer_without_a_cache_reports_no_census(parent, rows):
-    from meta_filter.solver import HeuristicRubricScorer
+    from meta_filter.core.solver import HeuristicRubricScorer
 
     assert pc.cache_census(
         HeuristicRubricScorer(),
@@ -254,7 +254,7 @@ class _FixedScorer:
         self.by_id = by_id
 
     def score(self, trajectory, criteria, rubric_md=""):
-        from meta_filter.solver import ScorerCost
+        from meta_filter.core.solver import ScorerCost
 
         value = self.by_id[trajectory.trajectory_id]
         return {c: value for c in criteria}, [], ScorerCost(llm_calls=0, llm_tokens=0)
@@ -545,7 +545,7 @@ def test_a_vanished_candidate_dir_does_not_crash_the_precheck(tmp_path, parent):
 
 
 def test_the_optimizer_rebuilds_a_deleted_baseline_before_the_precheck(tmp_path, parent):
-    from meta_filter.optimizer import Optimizer
+    from meta_filter.loop.optimizer import Optimizer
 
     baseline_dir = tmp_path / "iter001_baseline"
     assert not baseline_dir.exists()
@@ -685,7 +685,7 @@ def test_a_broken_candidate_still_gets_its_constraint_line(tmp_path, parent):
 
 
 def test_custom_limits_reach_the_check(tmp_path, parent):
-    from meta_filter.constraints import ConstraintLimits
+    from meta_filter.gate.constraints import ConstraintLimits
 
     rows = {tid: _traj(tid) for tid in ("a", "b")}
     initial = _copy_filter(tmp_path / "initial")

@@ -16,7 +16,7 @@ from __future__ import annotations
 
 import pytest
 
-from meta_filter.selector import AMONG_CANDIDATES_Z, Selector
+from meta_filter.gate.selector import AMONG_CANDIDATES_Z, Selector
 from tests.test_selector_paired_gate import BASE, PAIRS, _cand, _eval
 
 

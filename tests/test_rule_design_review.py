@@ -12,9 +12,9 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 
+from meta_filter.core.schemas import Decision, Trajectory
 from meta_filter.critics import rule_design
 from meta_filter.critics.rule_critic import RuleCritic
-from meta_filter.schemas import Decision, Trajectory
 
 
 def test_deleting_every_imperfect_rule_stops_paying():

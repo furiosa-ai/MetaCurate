@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from meta_filter.criterion_lift import (
+from meta_filter.core.schemas import Decision, FilterDecision
+from meta_filter.diagnostics.criterion_lift import (
     CRITERION_SIGNAL_BUDGET,
     render_criterion_signal,
     single_criterion_concordance,
 )
-from meta_filter.schemas import Decision, FilterDecision
 
 # Six rows; the judge's order is r0 > r1 > ... > r5 (pairs below).
 PAIRS = [("r0", "r1"), ("r1", "r2"), ("r2", "r3"), ("r3", "r4"), ("r4", "r5"), ("r0", "r5")]

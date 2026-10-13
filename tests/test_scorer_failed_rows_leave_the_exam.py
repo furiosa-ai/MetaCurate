@@ -26,13 +26,13 @@ import shutil
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from meta_filter.core.solver import HeuristicRubricScorer, ScorerCost, Solver
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
 from meta_filter.llm.base import LLMResponse
 from meta_filter.llm.cost_meter import metered
-from meta_filter.optimizer import Optimizer, OptimizerConfig
-from meta_filter.proposer import Proposer, ProposerResult
-from meta_filter.selector import Selector
-from meta_filter.solver import HeuristicRubricScorer, ScorerCost, Solver
-from meta_filter.validator import Validator
+from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+from meta_filter.propose.proposer import Proposer, ProposerResult
 from tests.demo_pool import selection_rows
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -265,9 +265,9 @@ def test_the_solver_marks_a_row_it_could_not_score(tmp_path):
     which a missing `rank_score` alone cannot: a filter may decline to rank a
     row by choice, and that is its own business."""
 
-    from meta_filter.filter_loader import load_filter
-    from meta_filter.llm_scorer import ScoreFailure, ScorerParseError
-    from meta_filter.trajectory import load_trajectories
+    from meta_filter.core.filter_loader import load_filter
+    from meta_filter.core.llm_scorer import ScoreFailure, ScorerParseError
+    from meta_filter.visibility.trajectory import load_trajectories
 
     class _RefusingScorer(HeuristicRubricScorer):
         """Unreadable on one row, ordinary on the rest — a whole pool of
@@ -297,8 +297,8 @@ def test_the_solver_marks_a_row_it_could_not_score(tmp_path):
 
 
 def test_a_scored_row_is_not_marked(tmp_path):
-    from meta_filter.filter_loader import load_filter
-    from meta_filter.trajectory import load_trajectories
+    from meta_filter.core.filter_loader import load_filter
+    from meta_filter.visibility.trajectory import load_trajectories
 
     rows = load_trajectories(TRAIN)[:2]
     decisions = Solver(rubric_scorer=HeuristicRubricScorer(), lazy_scoring=False).run(

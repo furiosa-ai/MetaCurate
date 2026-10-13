@@ -6,7 +6,7 @@ theme's keyword set is exercised on prose rather than on its own keywords.
 
 from __future__ import annotations
 
-from meta_filter.rationale_themes import (
+from meta_filter.propose.rationale_themes import (
     MIN_MISORDERED_PAIRS,
     THEMES,
     THEMES_BLOCK_BUDGET,
@@ -163,7 +163,7 @@ def _rule(name: str, doc: str, evidence: str):
 
 
 def test_a_rule_covers_the_theme_its_prose_names():
-    from meta_filter.rationale_themes import rule_coverage
+    from meta_filter.propose.rationale_themes import rule_coverage
 
     fn = _rule(
         "no_verification",
@@ -179,7 +179,7 @@ def test_a_rule_covers_the_theme_its_prose_names():
 def test_a_rule_that_names_no_theme_covers_nothing():
     """The wired blank seed's example rule carries no domain opinion."""
 
-    from meta_filter.rationale_themes import rule_coverage
+    from meta_filter.propose.rationale_themes import rule_coverage
 
     fn = _rule(
         "no_turns",
@@ -191,7 +191,7 @@ def test_a_rule_that_names_no_theme_covers_nothing():
 
 
 def test_covered_by_names_criteria_and_rules_together():
-    from meta_filter.rationale_themes import rationale_themes
+    from meta_filter.propose.rationale_themes import rationale_themes
 
     fn = _rule(
         "no_verification",
@@ -216,7 +216,7 @@ def test_covered_by_names_criteria_and_rules_together():
 
 
 def test_a_rule_with_no_readable_source_is_skipped_not_fatal():
-    from meta_filter.rationale_themes import rule_coverage
+    from meta_filter.propose.rationale_themes import rule_coverage
 
     fn = eval("lambda trajectory: None")  # noqa: S307 — no source for inspect
     fn.__name__ = "rule_runtime_built"

@@ -15,8 +15,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from meta_filter.constraints import check_candidate
-from meta_filter.criterion_lift import ZERO_LIFT_ACTION, render_ranking, zero_lift_items
+from meta_filter.diagnostics.criterion_lift import ZERO_LIFT_ACTION, render_ranking, zero_lift_items
+from meta_filter.gate.constraints import check_candidate
 
 RUBRIC = """# Rubric
 
@@ -197,7 +197,7 @@ def test_the_action_leaves_the_repair_and_dependency_routes_open():
 def test_the_one_hypothesis_rule_carves_out_the_zero_lift_removal():
     """The two instructions must not contradict each other in one prompt."""
 
-    from meta_filter.agentic_proposer import _agentic_instructions
+    from meta_filter.propose.agentic_proposer import _agentic_instructions
 
     text = _agentic_instructions(
         "candidates", 1, 3, "current_filter", parent_counts={"rubric_criteria": 3}
@@ -256,7 +256,7 @@ def test_the_floor_credit_reaches_rules_not_only_criteria(tmp_path):
     bounces — and under "in EVERY candidate" that bounce invalidates the whole
     iteration, not one candidate."""
 
-    from meta_filter.constraints import ConstraintLimits, check_candidate
+    from meta_filter.gate.constraints import ConstraintLimits, check_candidate
 
     def _rules(directory: Path, names: list[str]) -> None:
         (directory / "rules.py").write_text(
@@ -288,8 +288,8 @@ def test_the_revision_leg_carries_the_finding(tmp_path):
     removal folded into every candidate reads there as a shrunken filter with
     no upside, and the obvious repair is to put the criterion back."""
 
-    from meta_filter.agentic_proposer import _revision_instructions
-    from meta_filter.criterion_lift import zero_lift_note
+    from meta_filter.diagnostics.criterion_lift import zero_lift_note
+    from meta_filter.propose.agentic_proposer import _revision_instructions
 
     note = zero_lift_note(REPORT)
     assert note.startswith("- ZERO LIFT")

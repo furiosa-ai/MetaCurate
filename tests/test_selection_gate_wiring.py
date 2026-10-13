@@ -16,8 +16,8 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.optimizer import RUN_COMPLETE_FILE
-from meta_filter.selection_set import SelectionSet, selection_set_path
+from meta_filter.gate.selection_set import SelectionSet, selection_set_path
+from meta_filter.loop.optimizer import RUN_COMPLETE_FILE
 from tests.selection_gate_fixture import (
     BASELINE_POLICY,
     TRAIN_ONLY_POLICY,

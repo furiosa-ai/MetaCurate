@@ -32,8 +32,8 @@ from collections.abc import Sequence
 from dataclasses import dataclass, field
 from typing import Protocol
 
-from meta_filter.filter_loader import LoadedFilter
-from meta_filter.schemas import Decision, FilterDecision, Trajectory
+from meta_filter.core.filter_loader import LoadedFilter
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory
 
 logger = logging.getLogger(__name__)
 

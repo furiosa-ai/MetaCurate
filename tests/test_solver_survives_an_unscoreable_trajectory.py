@@ -17,9 +17,9 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.filter_loader import load_filter
-from meta_filter.schemas import Decision, Trajectory, Turn
-from meta_filter.solver import Solver
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.schemas import Decision, Trajectory, Turn
+from meta_filter.core.solver import Solver
 
 ROOT = Path(__file__).resolve().parents[1]
 SEED = ROOT / "tests" / "fixtures" / "filters" / "five_criteria"
@@ -39,7 +39,7 @@ class _RefusingScorer:
                 'claude headless exit 1: {"stop_reason":"refusal","result":'
                 '"API Error: Sonnet 5\'s safeguards flagged this message."}'
             )
-        from meta_filter.solver import ScorerCost
+        from meta_filter.core.solver import ScorerCost
 
         return {c: 3.0 for c in criteria}, ["ok"], ScorerCost(llm_calls=1, llm_tokens=10)
 
@@ -144,7 +144,7 @@ def test_the_warning_threshold_is_where_the_score_starts_to_move(caplog):
             self.seen += 1
             if self.seen <= self.n:
                 raise RuntimeError('{"stop_reason":"refusal"}')
-            from meta_filter.solver import ScorerCost
+            from meta_filter.core.solver import ScorerCost
 
             return {c: 1.0 for c in criteria}, [], ScorerCost()
 

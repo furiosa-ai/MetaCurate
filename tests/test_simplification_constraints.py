@@ -14,9 +14,9 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
-from meta_filter import constraints as cx
-from meta_filter.criterion_stats import criterion_stats
-from meta_filter.precheck import _constraint_line, run_precheck
+from meta_filter.diagnostics.criterion_stats import criterion_stats
+from meta_filter.gate import constraints as cx
+from meta_filter.gate.precheck import _constraint_line, run_precheck
 
 # --- fixtures -------------------------------------------------------------------
 
@@ -338,7 +338,7 @@ class _ConstantScorer:
     """Every criterion scores off its name: the dead one is 0 on every row."""
 
     def score(self, trajectory, criteria, rubric_md=""):
-        from meta_filter.solver import ScorerCost
+        from meta_filter.core.solver import ScorerCost
 
         scores = {}
         for c in criteria:
@@ -350,7 +350,7 @@ class _ConstantScorer:
 
 
 def _rows(n: int = 24):
-    from meta_filter.schemas import Trajectory
+    from meta_filter.core.schemas import Trajectory
 
     rng = np.random.default_rng(7)
     rows = {}
@@ -370,7 +370,7 @@ def _rows(n: int = 24):
 
 
 def test_run_precheck_reports_simplification_and_frozen_files(tmp_path, baseline, baseline_stats):
-    from meta_filter.filter_loader import load_filter
+    from meta_filter.core.filter_loader import load_filter
 
     names = ("Alpha", "Beta", "Gamma", "Twin")
     smaller = make_filter(

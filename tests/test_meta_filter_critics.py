@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory
 from meta_filter.critics import (
     BoundaryCritic,
     PrecisionCritic,
     RecallCritic,
     StaticVerdictBackend,
 )
-from meta_filter.schemas import Decision, FilterDecision, Trajectory
 
 
 def _traj(id_: str) -> Trajectory:

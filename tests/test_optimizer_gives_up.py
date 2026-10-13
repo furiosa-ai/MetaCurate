@@ -16,11 +16,11 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.optimizer import MAX_CONSECUTIVE_PROPOSER_FAILURES, Optimizer, OptimizerConfig
-from meta_filter.proposer import Proposer
-from meta_filter.selector import Selector
-from meta_filter.solver import HeuristicRubricScorer, Solver
-from meta_filter.validator import Validator
+from meta_filter.core.solver import HeuristicRubricScorer, Solver
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
+from meta_filter.loop.optimizer import MAX_CONSECUTIVE_PROPOSER_FAILURES, Optimizer, OptimizerConfig
+from meta_filter.propose.proposer import Proposer
 from tests.demo_pool import IdJudgeBackend, selection_rows
 
 ROOT = Path(__file__).resolve().parents[1]

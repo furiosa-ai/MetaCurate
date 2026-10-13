@@ -23,8 +23,8 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.optimizer import NOOP_REASON
-from meta_filter.solver import ScorerCost, Solver
+from meta_filter.core.solver import ScorerCost, Solver
+from meta_filter.loop.optimizer import NOOP_REASON
 from tests.selection_gate_fixture import RUBRIC, RULES, build_optimizer, prepare, task_number
 from tests.test_candidate_gating import INVERTED_NOISY_POLICY, RichProposer
 

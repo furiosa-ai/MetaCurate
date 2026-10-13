@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from meta_filter import concurrency
+from meta_filter.loop import concurrency
 
 GB = 1024**3
 

@@ -43,7 +43,16 @@ per iteration, and `runs/<run_id>/iterations/` holds every candidate filter.
 ## Repository layout
 
 ```
-src/meta_filter/   the search loop
+src/meta_filter/   the search loop; entry points (cli, score_tool, rule_tool) at the top
+  core/            data model, filter loading, rubric scoring
+  visibility/      what each role may see; outcome fields are stripped at load
+  loop/            the optimizer and run bookkeeping
+  propose/         the proposer and the evidence it is shown
+  gate/            precheck, constraints, pair judge, selection, paired test
+  diagnostics/     criterion health: dead, redundant and zero-lift axes
+  critics/         per-trajectory and per-filter critics
+  llm/             LLM clients, sandbox guards, cost meter
+  analysis/        post-run analysis (analyze-run)
 filters/           initial filters
 configs/           the demo config and four example run configs
 scripts/           selection-set, launcher and subset scripts
@@ -54,7 +63,7 @@ tests/             offline tests
 
 1. Put the trajectory pools under `data/` as JSONL, one trajectory per line
    (`trajectory_id`, `task`, `turns`, `metadata`; see
-   `src/meta_filter/schemas.py`).
+   `src/meta_filter/core/schemas.py`).
 2. Judge the selection pairs once:
    ```bash
    uv run python -m scripts.build_selection_set --rows <selection.jsonl> \

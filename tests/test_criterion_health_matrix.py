@@ -14,7 +14,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from meta_filter.criterion_stats import (
+from meta_filter.diagnostics.criterion_stats import (
     DEAD_REASON_ABSENT,
     DEAD_REASON_ONE_LEVEL,
     HEALTH_BLOCK_BUDGET,

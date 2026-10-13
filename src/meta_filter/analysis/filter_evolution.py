@@ -16,7 +16,7 @@ import re
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-from meta_filter.complexity import measure_filter_complexity
+from meta_filter.gate.complexity import measure_filter_complexity
 
 
 @dataclass

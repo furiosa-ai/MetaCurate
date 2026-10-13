@@ -20,9 +20,9 @@ from pathlib import Path
 
 import pytest
 
+from meta_filter.core.llm_scorer import LLMRubricScorer, _criterion_cache_key
+from meta_filter.core.schemas import Trajectory
 from meta_filter.llm.base import LLMResponse
-from meta_filter.llm_scorer import LLMRubricScorer, _criterion_cache_key
-from meta_filter.schemas import Trajectory
 
 # Computed on the pre-salt code (commit 4db77b0) and pasted, not derived.
 KEY_FULL_BEFORE = (

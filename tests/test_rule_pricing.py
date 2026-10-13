@@ -10,7 +10,7 @@ readout that separates the two.
 
 from types import SimpleNamespace
 
-from meta_filter.criterion_lift import render_rule_pricing, rule_pricing
+from meta_filter.diagnostics.criterion_lift import render_rule_pricing, rule_pricing
 
 ROW = SimpleNamespace(trajectory_id="t0")
 

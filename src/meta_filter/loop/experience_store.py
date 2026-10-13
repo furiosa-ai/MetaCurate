@@ -35,14 +35,14 @@ from pathlib import Path
 
 import yaml
 
-from meta_filter.filter_loader import LoadedFilter
-from meta_filter.pseudonym import Pseudonymizer
-from meta_filter.schemas import (
+from meta_filter.core.filter_loader import LoadedFilter
+from meta_filter.core.schemas import (
     CandidateEvaluation,
     FilterDecision,
     IterationRecord,
     RunConfig,
 )
+from meta_filter.visibility.pseudonym import Pseudonymizer
 
 
 @dataclass

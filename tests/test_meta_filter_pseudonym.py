@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-from meta_filter.experience_store import ExperienceStore
-from meta_filter.pseudonym import Pseudonymizer
-from meta_filter.schemas import CounterExample, Decision, FilterDecision, Trajectory
+from meta_filter.core.schemas import CounterExample, Decision, FilterDecision, Trajectory
+from meta_filter.loop.experience_store import ExperienceStore
+from meta_filter.visibility.pseudonym import Pseudonymizer
 
 REAL_ID = "pandas-dev__pandas-48540::att0"
 INSTANCE_ID = "pandas-dev__pandas-48540"

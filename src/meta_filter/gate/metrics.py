@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable, Mapping
 
-from meta_filter.schemas import Decision, FilterDecision, FilterMetrics, Trajectory
+from meta_filter.core.schemas import Decision, FilterDecision, FilterMetrics, Trajectory
 
 
 def _rate(numer: int, denom: int) -> float:

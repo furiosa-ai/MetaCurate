@@ -8,7 +8,7 @@ rather than content.
 
 from __future__ import annotations
 
-from meta_filter.rendering import (
+from meta_filter.core.rendering import (
     DEFAULT_TRAJECTORY_TOOL_BUDGET,
     MIN_TOOL_OUTPUT,
     allocate_tool_budgets,
@@ -16,7 +16,7 @@ from meta_filter.rendering import (
     render_turns,
     truncate_tool_output,
 )
-from meta_filter.schemas import Trajectory, Turn
+from meta_filter.core.schemas import Trajectory, Turn
 
 
 def _traj(turns: list[Turn], **metadata) -> Trajectory:

@@ -14,8 +14,8 @@ from pathlib import Path
 
 import yaml
 
-from meta_filter.agentic_proposer import _agentic_instructions
-from meta_filter.proposer import render_edit_discipline
+from meta_filter.propose.agentic_proposer import _agentic_instructions
+from meta_filter.propose.proposer import render_edit_discipline
 from tests.proposer_prompt_fixture import render
 from tests.selection_gate_fixture import (
     BASELINE_POLICY,

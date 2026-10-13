@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.complexity import measure_filter_complexity
-from meta_filter.filter_loader import FilterValidationError, load_filter, materialize_candidate
+from meta_filter.core.filter_loader import FilterValidationError, load_filter, materialize_candidate
+from meta_filter.gate.complexity import measure_filter_complexity
 
 INITIAL = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "filters" / "five_criteria"
 

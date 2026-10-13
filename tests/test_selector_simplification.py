@@ -22,7 +22,8 @@ from types import SimpleNamespace
 
 import pytest
 
-from meta_filter.optimizer import (
+from meta_filter.gate.selector import SelectionResult, Selector
+from meta_filter.loop.optimizer import (
     NOOP_REASON,
     PromotionConfirmation,
     _confirmation_summary_columns,
@@ -30,7 +31,6 @@ from meta_filter.optimizer import (
     confirm_promotion,
     gate_candidates,
 )
-from meta_filter.selector import SelectionResult, Selector
 from tests.test_selector_paired_gate import BASE, PAIRS, _cand, _eval
 
 # --- choose_paired ----------------------------------------------------------------

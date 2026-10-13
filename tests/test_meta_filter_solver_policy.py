@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from meta_filter.filter_loader import load_filter
-from meta_filter.schemas import Decision, Trajectory, Turn
-from meta_filter.solver import Solver
-from meta_filter.trajectory import load_trajectories
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.schemas import Decision, Trajectory, Turn
+from meta_filter.core.solver import Solver
+from meta_filter.visibility.trajectory import load_trajectories
 
 INITIAL = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "filters" / "five_criteria"
 

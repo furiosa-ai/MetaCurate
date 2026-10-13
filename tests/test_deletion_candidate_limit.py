@@ -26,7 +26,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from meta_filter.optimizer import SECOND_DELETION_REASON, gate_candidates
+from meta_filter.loop.optimizer import SECOND_DELETION_REASON, gate_candidates
 from tests.selection_gate_fixture import TRUTH_POLICY, prepare
 from tests.test_candidate_gating import (
     INVERTED_NOISY_POLICY,

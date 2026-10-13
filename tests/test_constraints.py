@@ -15,7 +15,7 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter import constraints as cx
+from meta_filter.gate import constraints as cx
 
 # --- fixtures: filters small enough to state a threshold in one number ------
 

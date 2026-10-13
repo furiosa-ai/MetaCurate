@@ -40,9 +40,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from meta_filter.llm.cost_meter import LEDGER, RoleCost, metered
-from meta_filter.metadata_free import file_sha256, pseudonymize_id, pseudonymize_selection_set
-from meta_filter.selection_set import (
+from meta_filter.gate.selection_set import (
     ALL_PAIRS,
     PairCount,
     SelectionSet,
@@ -50,8 +48,14 @@ from meta_filter.selection_set import (
     judge_selection_pairs,
     plan_selection_pairs,
 )
-from meta_filter.trajectory import load_trajectories
-from meta_filter.view_policy import SCORER_BASELINE_FIELDS, absent_field_signature
+from meta_filter.llm.cost_meter import LEDGER, RoleCost, metered
+from meta_filter.visibility.metadata_free import (
+    file_sha256,
+    pseudonymize_id,
+    pseudonymize_selection_set,
+)
+from meta_filter.visibility.trajectory import load_trajectories
+from meta_filter.visibility.view_policy import SCORER_BASELINE_FIELDS, absent_field_signature
 
 logger = logging.getLogger(__name__)
 
@@ -313,9 +317,9 @@ def make_judge(model: str, cache_dir: Path, extra_body: dict | None) -> _PairJud
     the judge, so the verdicts land in the same cache files a run reads.
     """
 
+    from meta_filter.gate.pair_judge import PairJudge
     from meta_filter.llm.codex_cli import read_provider_key
     from meta_filter.llm.openai_compatible import OpenAICompatibleClient
-    from meta_filter.pair_judge import PairJudge
 
     client = OpenAICompatibleClient(
         model=model,

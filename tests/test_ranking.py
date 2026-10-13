@@ -1,4 +1,4 @@
-"""Tests for the pure ranking math in meta_filter.ranking."""
+"""Tests for the pure ranking math in meta_filter.gate.ranking."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import json
 import math
 import random
 
-from meta_filter.ranking import (
+from meta_filter.gate.ranking import (
     PairTruth,
     concordance,
     default_min_distinct_levels,
@@ -234,7 +234,7 @@ def test_render_distribution_stable_and_bounded() -> None:
 
 
 def test_missed_pairs_orders_by_inversion_gap() -> None:
-    from meta_filter.ranking import missed_pairs
+    from meta_filter.gate.ranking import missed_pairs
 
     scores = {"w1": 10.0, "l1": 40.0, "w2": 50.0, "l2": 55.0, "w3": 90.0, "l3": 10.0}
     judged = [("w1", "l1"), ("w2", "l2"), ("w3", "l3"), ("w4", "l4")]
@@ -246,7 +246,7 @@ def test_missed_pairs_orders_by_inversion_gap() -> None:
 
 
 def test_missed_pairs_ties_are_not_misses() -> None:
-    from meta_filter.ranking import missed_pairs
+    from meta_filter.gate.ranking import missed_pairs
 
     assert missed_pairs({"a": 5.0, "b": 5.0}, [("a", "b")]) == []
 

@@ -22,15 +22,15 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.agentic_proposer import _agentic_instructions
-from meta_filter.criterion_stats import charge_redundancy
+from meta_filter.core.solver import ScorerCost, Solver
+from meta_filter.diagnostics.criterion_stats import charge_redundancy
+from meta_filter.gate.precheck import PrecheckResult, render_precheck_block
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
 from meta_filter.llm.base import LLMResponse
-from meta_filter.optimizer import Optimizer, OptimizerConfig
-from meta_filter.precheck import PrecheckResult, render_precheck_block
-from meta_filter.proposer import Proposer, ProposerResult, build_proposer_system
-from meta_filter.selector import Selector
-from meta_filter.solver import ScorerCost, Solver
-from meta_filter.validator import Validator
+from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+from meta_filter.propose.agentic_proposer import _agentic_instructions
+from meta_filter.propose.proposer import Proposer, ProposerResult, build_proposer_system
 from tests.demo_pool import selection_rows
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,7 +103,7 @@ class _TweakingProposer(Proposer):
 
     def propose(self, *, candidates_root, iteration, **_kw):
         cand = Path(candidates_root) / f"iter{iteration:03d}_00_twin"
-        from meta_filter.filter_loader import materialize_candidate
+        from meta_filter.core.filter_loader import materialize_candidate
 
         materialize_candidate(
             cand,
@@ -120,7 +120,7 @@ class _TweakingProposer(Proposer):
 
 def _twin_run(tmp_path: Path) -> Path:
     initial = tmp_path / "initial"
-    from meta_filter.filter_loader import materialize_candidate
+    from meta_filter.core.filter_loader import materialize_candidate
 
     materialize_candidate(
         initial, rubric_md=TWIN_RUBRIC, rules_py=TWIN_RULES, policy_py=TWIN_POLICY
@@ -234,7 +234,7 @@ def test_the_tool_using_mission_states_the_consequence():
 
 
 def test_the_criterion_health_block_names_the_score_the_pair_costs():
-    from meta_filter.criterion_stats import render_criterion_health
+    from meta_filter.diagnostics.criterion_stats import render_criterion_health
 
     stats = {
         "n_rows": 12,

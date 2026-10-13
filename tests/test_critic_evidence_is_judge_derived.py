@@ -21,13 +21,13 @@ import json
 import shutil
 from pathlib import Path
 
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory, Turn
+from meta_filter.core.solver import HeuristicRubricScorer, Solver
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
 from meta_filter.llm.base import LLMResponse
-from meta_filter.optimizer import Optimizer, OptimizerConfig, _pair_misorder_examples
-from meta_filter.proposer import Proposer, ProposerResult
-from meta_filter.schemas import Decision, FilterDecision, Trajectory, Turn
-from meta_filter.selector import Selector
-from meta_filter.solver import HeuristicRubricScorer, Solver
-from meta_filter.validator import Validator
+from meta_filter.loop.optimizer import Optimizer, OptimizerConfig, _pair_misorder_examples
+from meta_filter.propose.proposer import Proposer, ProposerResult
 from tests.demo_pool import selection_rows
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -306,9 +306,9 @@ def test_the_pair_records_reach_the_proposer_as_one_pair_block(tmp_path):
     proposer reading it reported that no adjudicated mistakes existed.
     """
 
-    from meta_filter.filter_loader import load_filter, materialize_candidate
-    from meta_filter.proposer import Proposer
-    from meta_filter.schemas import FilterMetrics
+    from meta_filter.core.filter_loader import load_filter, materialize_candidate
+    from meta_filter.core.schemas import FilterMetrics
+    from meta_filter.propose.proposer import Proposer
 
     traj_by_id = {tid: _traj(tid) for tid in ("hi", "lo")}
     decisions = {

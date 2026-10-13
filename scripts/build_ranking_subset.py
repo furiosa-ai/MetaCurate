@@ -47,14 +47,14 @@ import random
 import shutil
 from pathlib import Path
 
-from meta_filter.filter_loader import load_filter
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.llm_scorer import LLMRubricScorer
+from meta_filter.core.solver import Solver
 from meta_filter.llm import build_client
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
 from meta_filter.llm.cost_meter import LEDGER, metered
-from meta_filter.llm_scorer import LLMRubricScorer
-from meta_filter.metadata_free import filter_outcome_reads, pseudonym_map
-from meta_filter.solver import Solver
-from meta_filter.trajectory import load_trajectories
+from meta_filter.visibility.metadata_free import filter_outcome_reads, pseudonym_map
+from meta_filter.visibility.trajectory import load_trajectories
 from scripts.package_subset import index_superset
 from scripts.sft_config import SFT_YAML_NAME, write_sft_yaml
 

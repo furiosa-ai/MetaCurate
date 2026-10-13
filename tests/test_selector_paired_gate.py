@@ -11,9 +11,9 @@ import math
 
 import pytest
 
-from meta_filter.paired_test import one_sided_p_from_z, z_threshold_for
-from meta_filter.schemas import CandidateEvaluation, FilterMetrics
-from meta_filter.selector import Selector
+from meta_filter.core.schemas import CandidateEvaluation, FilterMetrics
+from meta_filter.gate.paired_test import one_sided_p_from_z, z_threshold_for
+from meta_filter.gate.selector import Selector
 
 
 def _eval(

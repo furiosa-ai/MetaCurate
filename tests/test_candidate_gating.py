@@ -27,12 +27,12 @@ from unittest import mock
 
 import pytest
 
-from meta_filter.agentic_proposer import _agentic_instructions, _read_diagnosis
-from meta_filter.constraints import ConstraintLimits
-from meta_filter.filter_loader import materialize_candidate
+from meta_filter.core.filter_loader import materialize_candidate
+from meta_filter.gate.constraints import ConstraintLimits
+from meta_filter.gate.paired_test import z_threshold_for
 from meta_filter.llm.base import LLMResponse
-from meta_filter.paired_test import z_threshold_for
-from meta_filter.proposer import ProposerResult, _write_rationale_md, render_edit_discipline
+from meta_filter.propose.agentic_proposer import _agentic_instructions, _read_diagnosis
+from meta_filter.propose.proposer import ProposerResult, _write_rationale_md, render_edit_discipline
 from tests.proposer_prompt_fixture import REPORTS, a_filter, stub_metrics
 from tests.selection_gate_fixture import (
     BASELINE_POLICY,
@@ -376,7 +376,7 @@ def test_three_identical_candidates_score_once_and_the_lowest_complexity_copy_is
 
 
 def test_a_candidate_identical_to_the_baseline_on_the_judged_pairs_is_a_no_op(duplicates_run):
-    from meta_filter.optimizer import NOOP_REASON
+    from meta_filter.loop.optimizer import NOOP_REASON
 
     held = _precheck(duplicates_run, 1)["gated_out"]
     assert held["iter001_03_restated_baseline"]["reason"] == NOOP_REASON
@@ -435,7 +435,7 @@ class _Readout:
 
 
 def test_gate_candidates_collapses_equal_vectors_and_holds_baseline_copies():
-    from meta_filter.optimizer import NOOP_REASON, gate_candidates
+    from meta_filter.loop.optimizer import NOOP_REASON, gate_candidates
 
     right = {("h1", "l1"): 1.0, ("h2", "l2"): 1.0}
     wrong = {("h1", "l1"): 1.0, ("h2", "l2"): 0.0}
@@ -456,7 +456,7 @@ def test_gate_candidates_collapses_equal_vectors_and_holds_baseline_copies():
 
 
 def test_gate_candidates_collapse_precedes_the_rank_cut(tmp_path):
-    from meta_filter.optimizer import gate_candidates
+    from meta_filter.loop.optimizer import gate_candidates
 
     right = {("h1", "l1"): 1.0}
     half = {("h1", "l1"): 0.5}
@@ -470,7 +470,7 @@ def test_gate_candidates_collapse_precedes_the_rank_cut(tmp_path):
 
 
 def test_gate_candidates_without_a_parent_or_vectors_collapses_nothing():
-    from meta_filter.optimizer import gate_candidates
+    from meta_filter.loop.optimizer import gate_candidates
 
     dirs = [Path("/c/a"), Path("/c/b")]
     kept, held = gate_candidates(
@@ -664,7 +664,7 @@ def test_the_gating_sentence_appears_only_when_gating_is_on():
 def _static_prompt(tmp_path, **attrs) -> str:
     """The static proposer prompt as the optimizer renders it."""
 
-    from meta_filter.proposer import Proposer
+    from meta_filter.propose.proposer import Proposer
 
     proposer = Proposer(n_candidates=attrs.pop("n_candidates", 3))
     for name, value in attrs.items():
@@ -704,7 +704,7 @@ def test_the_prompt_prints_the_rule_floor_the_check_computes_for_a_real_sized_fi
     """Nine rules: the floor is 9 - 5 = 4, the minimum does not bind, and the
     number in the prompt is `floor_for`'s."""
 
-    from meta_filter.constraints import ConstraintLimits
+    from meta_filter.gate.constraints import ConstraintLimits
 
     parent = {**PARENT, "rule_count": 9}
     text = " ".join(
@@ -788,7 +788,7 @@ def test_every_hypothesis_line_the_agent_wrote_survives_the_rewrite(tmp_path):
     unable to fire: `count_mechanisms` ran on a file this writer had already
     normalised to one line."""
 
-    from meta_filter.constraints import count_mechanisms
+    from meta_filter.gate.constraints import count_mechanisms
 
     (tmp_path / "rationale.md").write_text(
         "# mine\n\n## Hypothesis: the rule fires on tests too\n\nprose\n\n"
@@ -804,7 +804,7 @@ def test_every_hypothesis_line_the_agent_wrote_survives_the_rewrite(tmp_path):
 
 
 def test_a_field_carrying_two_markers_is_written_as_two_lines(tmp_path):
-    from meta_filter.constraints import count_mechanisms
+    from meta_filter.gate.constraints import count_mechanisms
 
     _write_rationale_md(
         tmp_path,
@@ -822,7 +822,7 @@ def test_a_two_mechanism_candidate_is_rejected_by_the_constraint_check(tmp_path)
     """End to end through `check_candidate`: the writer keeps both lines and
     the precheck's constraint report comes back invalid."""
 
-    from meta_filter.constraints import check_candidate
+    from meta_filter.gate.constraints import check_candidate
 
     base = tmp_path / "base"
     materialize_candidate(base, rubric_md=RUBRIC, rules_py=RULES, policy_py=TRUTH_POLICY)
@@ -838,7 +838,7 @@ def test_a_two_mechanism_candidate_is_rejected_by_the_constraint_check(tmp_path)
 
 
 def test_a_diagnosis_bullet_starting_with_the_marker_is_not_a_hypothesis(tmp_path):
-    from meta_filter.constraints import count_mechanisms
+    from meta_filter.gate.constraints import count_mechanisms
 
     _write_rationale_md(
         tmp_path,

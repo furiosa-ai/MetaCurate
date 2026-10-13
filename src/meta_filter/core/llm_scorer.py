@@ -24,16 +24,16 @@ from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from meta_filter.llm.base import LLMClient
-from meta_filter.rendering import (
+from meta_filter.core.rendering import (
     DEFAULT_TRAJECTORY_TOOL_BUDGET,
     render_submission,
     render_turns,
     view_signature,
 )
-from meta_filter.schemas import Trajectory
-from meta_filter.solver import ScorerCost
-from meta_filter.view_policy import (
+from meta_filter.core.schemas import Trajectory
+from meta_filter.core.solver import ScorerCost
+from meta_filter.llm.base import LLMClient
+from meta_filter.visibility.view_policy import (
     SCORER_BASELINE_FIELDS,
     absent_field_signature,
     declared_fields,
@@ -44,7 +44,11 @@ from meta_filter.view_policy import (
     scorer_reference_blocks,
 )
 
-logger = logging.getLogger(__name__)
+# Named, not `__name__`: score_tool and rule_tool print WARNING records as
+# "LEVEL name: message" to the sandboxed proposer's stderr, so this name is part
+# of what the proposer reads. It is the module's name from before it moved into
+# core/; tests/test_scorer_parse_failure.py filters on it.
+logger = logging.getLogger("meta_filter.llm_scorer")
 
 # Attempts at one criterion before the row is failed. The prompt is identical
 # every time: at temperature 0 a retry re-rolls the sampler and nothing else,

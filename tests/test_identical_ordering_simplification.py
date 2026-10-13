@@ -29,9 +29,9 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.filter_loader import load_filter
-from meta_filter.selection_set import baseline_scores_path
-from meta_filter.solver import Solver
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.solver import Solver
+from meta_filter.gate.selection_set import baseline_scores_path
 from tests.selection_gate_fixture import RULES, prepare
 from tests.test_candidate_gating import INVERTED_NOISY_POLICY
 from tests.test_simplification_acceptance_end_to_end import (

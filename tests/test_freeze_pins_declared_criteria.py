@@ -7,7 +7,7 @@ a criterion rubric.md does not define.
 
 from pathlib import Path
 
-from meta_filter.constraints import frozen_changed
+from meta_filter.gate.constraints import frozen_changed
 
 POLICY = """
 RUBRIC_CRITERIA = {criteria!r}

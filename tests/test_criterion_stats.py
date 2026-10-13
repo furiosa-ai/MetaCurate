@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import numpy as np
 
-from meta_filter.criterion_stats import (
+from meta_filter.diagnostics.criterion_stats import (
     criterion_stats,
     redundancy_penalty,
     render_criterion_health,

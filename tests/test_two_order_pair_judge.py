@@ -14,14 +14,14 @@ from __future__ import annotations
 
 import json
 
-from meta_filter.pair_judge import (
+from meta_filter.core.schemas import Trajectory, Turn
+from meta_filter.gate.pair_judge import (
     ORDER_FORWARD,
     ORDER_REVERSED,
     PairJudge,
 )
-from meta_filter.ranking import concordance_detail
-from meta_filter.schemas import Trajectory, Turn
-from meta_filter.view_policy import pair_view_signature
+from meta_filter.gate.ranking import concordance_detail
+from meta_filter.visibility.view_policy import pair_view_signature
 
 
 class _PositionBiasedClient:

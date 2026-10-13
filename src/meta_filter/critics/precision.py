@@ -9,8 +9,8 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 
+from meta_filter.core.schemas import CounterExample, Decision, FilterDecision, Trajectory
 from meta_filter.critics.backend import CriticBackend
-from meta_filter.schemas import CounterExample, Decision, FilterDecision, Trajectory
 
 
 @dataclass

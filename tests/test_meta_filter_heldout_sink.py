@@ -11,8 +11,8 @@ import json
 
 import pytest
 
-from meta_filter.experience_store import ExperienceStore
-from meta_filter.schemas import CandidateEvaluation, FilterMetrics
+from meta_filter.core.schemas import CandidateEvaluation, FilterMetrics
+from meta_filter.loop.experience_store import ExperienceStore
 
 
 def _metrics(accuracy: float) -> FilterMetrics:
