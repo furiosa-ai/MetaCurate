@@ -1,8 +1,23 @@
-# MetaCurate
+# MetaCurate: Evolving Curation Filters for High-Quality Agentic Coding Data
 
-[Project page](https://furiosa-air.github.io/metacurate/) ·
-Dataset on Hugging Face (coming soon)
-<!-- TODO: link the Hugging Face dataset here when it is published. -->
+<p align="center">
+  <img src="docs/img/teaser.png" width="85%" alt="Four ways to select agent trajectories for SFT, ending with MetaCurate, which validates each filter revision with an LLM judge instead of training a model.">
+</p>
+
+<p align="center">
+  Donghoon Kim<sup>*1</sup>, Seunghyuk Oh<sup>*1</sup>, Kevin Galim<sup>1</sup>, Minseo Kim<sup>2</sup>, Minjae Lee<sup>1</sup>,<br>
+  Younghyun Kim<sup>1</sup>, Wooseok Seo<sup>1</sup>, Hyung Il Koo<sup>1</sup>, Wonjun Kang<sup>1</sup>
+</p>
+<p align="center">
+  <sup>1</sup>FuriosaAI, <sup>2</sup>University of California, Berkeley<br>
+  <sup>*</sup>Equal contribution
+</p>
+
+<p align="center">
+  <a href="https://furiosa-air.github.io/metacurate/"><img alt="Project" src="https://img.shields.io/static/v1?label=Project&message=Page&color=blue&logo=github-pages"></a>
+  <!-- TODO: link the Hugging Face dataset and change the message to "Hugging Face" once it is published. -->
+  <img alt="Dataset" src="https://img.shields.io/static/v1?label=Dataset&message=coming%20soon&color=lightgrey&logo=huggingface">
+</p>
 
 MetaCurate evolves a curation filter for selecting SFT data from coding-agent
 trajectories, using pairwise LLM judgments. A filter is a set of rules, an
@@ -66,7 +81,16 @@ uv run pytest
 
 ## Citation
 
-MetaCurate: Evolving Curation Filters for High-Quality Agentic Coding Data.
+<!-- TODO: fill in the arXiv ID once the preprint is out. -->
+```bibtex
+@article{kim2026metacurate,
+  title   = {MetaCurate: Evolving Curation Filters for High-Quality Agentic Coding Data},
+  author  = {Kim, Donghoon and Oh, Seunghyuk and Galim, Kevin and Kim, Minseo and
+             Lee, Minjae and Kim, Younghyun and Seo, Wooseok and Koo, Hyung Il and Kang, Wonjun},
+  journal = {arXiv preprint arXiv:[ARXIV ID]},
+  year    = {2026}
+}
+```
 
 ## License
 
