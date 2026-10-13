@@ -1,8 +1,9 @@
 # MetaCurate
 
-MetaCurate learns a filter that picks SFT data from coding-agent trajectories.
-An LLM rewrites the filter, and a rewrite is kept only if it agrees more often
-with a pairwise LLM judge on held-out pairs. Test results are never used.
+MetaCurate evolves a curation filter for selecting SFT data from coding-agent
+trajectories, using pairwise LLM judgments. A filter is a set of rules, an
+LLM-scored rubric, and a policy that combines them into one score per
+trajectory.
 
 ## Quick start
 
