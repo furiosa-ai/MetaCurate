@@ -68,7 +68,12 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from meta_filter.llm import harness_guard as hg
-from meta_filter.llm.base import LLMResponse, UsageLimitError, scrub_credentials
+from meta_filter.llm.base import (
+    LLMResponse,
+    UsageLimitError,
+    scrub_credentials,
+    usage_limit_detail,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -719,15 +724,7 @@ def _log_tail(path: Path, lines: int = 5) -> str:
 
 
 def _usage_limit_detail(body: str) -> str:
-    """The cap sentence from a failure body, or `""` if it is not a cap."""
-
-    low = (body or "").lower()
-    if not any(marker in low for marker in _USAGE_LIMIT_MARKERS):
-        return ""
-    for line in reversed((body or "").strip().splitlines()):
-        if any(marker in line.lower() for marker in _USAGE_LIMIT_MARKERS):
-            return line.strip()[:400]
-    return (body or "").strip()[:400]
+    return usage_limit_detail(body, _USAGE_LIMIT_MARKERS)
 
 
 # ------------------------------------------------------------- log parsing

@@ -7,10 +7,18 @@ the *filters' reasoning* is looking at the right signals — not just to
 approve or reject in a vacuum.
 
 Keeping the text in one place means every critic upgrade lands in every
-critic, and prompt drift between them is impossible.
+critic, and prompt drift between them is impossible. The on-disk response
+cache the critics share is read here too.
 """
 
 from __future__ import annotations
+
+import json
+import logging
+from pathlib import Path
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 CRITIC_PREAMBLE = (
     "You are a data-quality auditor for a project that trains SWE (software "
@@ -24,3 +32,15 @@ CRITIC_PREAMBLE = (
     "whether the fix belongs in the rubric prompt, in the rules, or in the "
     "aggregation policy."
 )
+
+
+def load_cache(path: Path) -> dict[str, Any] | None:
+    """A cached critic response, or None if absent or unreadable."""
+
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        logger.warning("bad cache entry at %s, will re-query", path)
+        return None

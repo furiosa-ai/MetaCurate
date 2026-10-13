@@ -41,7 +41,12 @@ from urllib.parse import urlparse
 
 from meta_filter.llm import pricing
 from meta_filter.llm.agent_guard import ENV_AUDIT, ENV_ROOT, build_guard_settings
-from meta_filter.llm.base import LLMResponse, UsageLimitError, scrub_credentials
+from meta_filter.llm.base import (
+    LLMResponse,
+    UsageLimitError,
+    scrub_credentials,
+    usage_limit_detail,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -395,17 +400,4 @@ _USAGE_LIMIT_MARKERS = (
 
 
 def _usage_limit_detail(stdout: str | None) -> str:
-    """The cap message from a CLI failure body, or `""` if it is not a cap.
-
-    Returns the matched sentence rather than a bool so the run's last log
-    line carries the regain date the CLI reports ("You will regain access on
-    <date> at 00:00 UTC"), which is the one fact the reader needs.
-    """
-
-    body = stdout or ""
-    if not any(marker in body for marker in _USAGE_LIMIT_MARKERS):
-        return ""
-    for line in reversed(body.strip().splitlines()):
-        if any(marker in line for marker in _USAGE_LIMIT_MARKERS):
-            return line.strip()[:400]
-    return body.strip()[:400]
+    return usage_limit_detail(stdout, _USAGE_LIMIT_MARKERS)

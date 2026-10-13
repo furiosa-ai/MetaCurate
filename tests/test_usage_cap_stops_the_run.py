@@ -59,3 +59,9 @@ def test_the_error_is_not_a_plain_runtimeerror_to_the_optimizer() -> None:
 
     assert issubclass(UsageLimitError, RuntimeError)
     assert UsageLimitError is not RuntimeError
+
+
+def test_the_marker_match_ignores_case() -> None:
+    """The Codex client always folded case; this one now shares its matcher."""
+
+    assert _usage_limit_detail(CAP_BODY.replace("API usage limits", "api usage limits"))

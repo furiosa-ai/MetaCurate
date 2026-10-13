@@ -160,7 +160,7 @@ def _commands(trajectory):
     return cmds, malformed, n_assistant
 
 
-# --- Per-command classification (copied from rule_filter.py) ----------------
+# --- Per-command classification ----------------------------------------------
 
 
 def _segment_tokens(cmd: str) -> list[str]:

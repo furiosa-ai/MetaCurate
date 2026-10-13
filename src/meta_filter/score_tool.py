@@ -660,7 +660,12 @@ class ScoreReport:
         )
 
 
-def _pick_rows(request: ScoreRequest, train_ids: list[str], idmap: IdMap) -> list[str]:
+def _pick_rows(
+    request: ScoreRequest,
+    train_ids: list[str],
+    idmap: IdMap,
+    refusal: type[Exception] = ScoreToolRefusal,
+) -> list[str]:
     """The pool ids to score, with pseudonyms resolved first.
 
     Resolution has to happen before the train check, not after: the agent
@@ -674,12 +679,15 @@ def _pick_rows(request: ScoreRequest, train_ids: list[str], idmap: IdMap) -> lis
     new is that a name the run does not know is told so: that case is a typo
     the agent can fix, and it has to be told apart from the hidden rows the
     agent must not reach.
+
+    `rule_tool` shares this function with its own `refusal` class, so both
+    tools refuse in the same words.
     """
 
     if request.rows:
         wanted = [r.strip() for r in request.rows if r.strip()]
         if len(wanted) > MAX_ROWS_PER_CALL:
-            raise ScoreToolRefusal(
+            raise refusal(
                 f"refused: {len(wanted)} rows requested; at most {MAX_ROWS_PER_CALL} per call"
             )
         train = set(train_ids)
@@ -696,7 +704,7 @@ def _pick_rows(request: ScoreRequest, train_ids: list[str], idmap: IdMap) -> lis
             else:
                 outside.append(token)
         if unknown:
-            raise ScoreToolRefusal(
+            raise refusal(
                 f"refused: {len(unknown)} unrecognised id(s) ({', '.join(unknown[:5])}); "
                 "no trajectory of this run goes by that name — check the spelling against "
                 "the ids the diagnostics print and call again"
@@ -704,14 +712,14 @@ def _pick_rows(request: ScoreRequest, train_ids: list[str], idmap: IdMap) -> lis
         if outside:
             # The same sentence whether the id is a selection row or a probe
             # row: saying which would be its own leak.
-            raise ScoreToolRefusal(
+            raise refusal(
                 f"refused: {len(outside)} id(s) are not in this run's train pool "
                 f"({', '.join(outside[:5])}); only train rows can be scored here"
             )
         return resolved
     n = request.sample
     if n < 1 or n > MAX_ROWS_PER_CALL:
-        raise ScoreToolRefusal(f"refused: --sample must be between 1 and {MAX_ROWS_PER_CALL}")
+        raise refusal(f"refused: --sample must be between 1 and {MAX_ROWS_PER_CALL}")
     ordered = sorted(train_ids)
     return random.Random(request.seed).sample(ordered, min(n, len(ordered)))
 

@@ -47,7 +47,6 @@ import argparse
 import importlib.util
 import json
 import logging
-import random
 import sys
 import uuid
 from collections.abc import Sequence
@@ -65,6 +64,7 @@ from meta_filter.score_tool import (
     REPO_ROOT,
     IdMap,
     _judged_pairs,
+    _pick_rows,
     _resolve,
 )
 from meta_filter.trajectory import load_trajectories
@@ -211,54 +211,6 @@ class RuleOutcome:
         return seen
 
 
-def _pick_rows(request: RuleRequest, train_ids: list[str], idmap: IdMap) -> list[str]:
-    """The pool ids to check, with pseudonyms resolved first.
-
-    Lifted from `score_tool._pick_rows` deliberately, refusal sentences
-    included: the boundary is the same boundary, and a proposer that has
-    learnt what one tool's refusal means should not have to learn it twice.
-    """
-
-    if request.rows:
-        wanted = [r.strip() for r in request.rows if r.strip()]
-        if len(wanted) > MAX_ROWS_PER_CALL:
-            raise RuleToolRefusal(
-                f"refused: {len(wanted)} rows requested; at most {MAX_ROWS_PER_CALL} per call"
-            )
-        train = set(train_ids)
-        resolved: list[str] = []
-        outside: list[str] = []
-        unknown: list[str] = []
-        for token in wanted:
-            real = idmap.real_id(token)
-            if real in train:
-                if real not in resolved:
-                    resolved.append(real)
-            elif idmap and not idmap.names_a_row(token):
-                unknown.append(token)
-            else:
-                outside.append(token)
-        if unknown:
-            raise RuleToolRefusal(
-                f"refused: {len(unknown)} unrecognised id(s) ({', '.join(unknown[:5])}); "
-                "no trajectory of this run goes by that name — check the spelling against "
-                "the ids the diagnostics print and call again"
-            )
-        if outside:
-            # The same sentence whether the id is a selection row or a probe
-            # row: saying which would be its own leak.
-            raise RuleToolRefusal(
-                f"refused: {len(outside)} id(s) are not in this run's train pool "
-                f"({', '.join(outside[:5])}); only train rows can be scored here"
-            )
-        return resolved
-    n = request.sample
-    if n < 1 or n > MAX_ROWS_PER_CALL:
-        raise RuleToolRefusal(f"refused: --sample must be between 1 and {MAX_ROWS_PER_CALL}")
-    ordered = sorted(train_ids)
-    return random.Random(request.seed).sample(ordered, min(n, len(ordered)))
-
-
 def _run_rule(rule, rows: list[Trajectory], idmap: IdMap) -> RuleOutcome:
     """Run one rule over the rows, collecting fires and exceptions alike.
 
@@ -402,7 +354,7 @@ def _check(request: RuleRequest, settings: RuleRunSettings) -> RuleReport:
     train = load_trajectories(settings.train_data)
     by_id = {t.trajectory_id: t for t in train}
     idmap = IdMap.for_run(settings.run_dir)
-    row_ids = _pick_rows(request, list(by_id), idmap)
+    row_ids = _pick_rows(request, list(by_id), idmap, refusal=RuleToolRefusal)
     rows = [by_id[r] for r in row_ids]
     sampled = [idmap.display_id(r) for r in row_ids]
     judged = _judged_pairs(settings.run_dir)
