@@ -12,7 +12,7 @@ import json
 
 import pytest
 
-from meta_filter.resume import completed_iterations, rebuild
+from meta_filter.loop.resume import completed_iterations, rebuild
 
 SUMMARY_HEADER = (
     "iteration,selected,is_baseline,loss,score,critic_agreement,rubric_quality,"

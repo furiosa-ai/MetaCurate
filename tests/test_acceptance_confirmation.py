@@ -23,16 +23,16 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.filter_loader import load_filter
-from meta_filter.optimizer import PromotionConfirmation, confirm_promotion
-from meta_filter.paired_test import (
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.solver import Solver
+from meta_filter.gate.paired_test import (
     one_sided_p_from_z,
     pair_correctness,
     paired_stats,
     stats_from_counts,
 )
-from meta_filter.selection_set import baseline_scores_path
-from meta_filter.solver import Solver
+from meta_filter.gate.selection_set import baseline_scores_path
+from meta_filter.loop.optimizer import PromotionConfirmation, confirm_promotion
 from tests.selection_gate_fixture import (
     TRUTH_POLICY,
     MetaScorer,

@@ -35,8 +35,8 @@ from __future__ import annotations
 import copy
 import logging
 
-from meta_filter.filter_loader import LoadedFilter
-from meta_filter.schemas import FilterDecision, Trajectory
+from meta_filter.core.filter_loader import LoadedFilter
+from meta_filter.core.schemas import FilterDecision, Trajectory
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +88,7 @@ def measure_ranking(
     scores. Pure python on already-paid scores; zero marginal LLM cost.
     """
 
-    from meta_filter.ranking import kendall_distance
+    from meta_filter.gate.ranking import kendall_distance
 
     by_id = {t.trajectory_id: t for t in trajectories}
     original: dict[str, float] = {}
@@ -299,7 +299,7 @@ def single_criterion_concordance(
     ``{criterion: {"concordance", "n_pairs"}}``; empty without pairs.
     """
 
-    from meta_filter.ranking import concordance_detail
+    from meta_filter.gate.ranking import concordance_detail
 
     if not pairs:
         return {}

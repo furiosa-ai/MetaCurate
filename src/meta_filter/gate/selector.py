@@ -24,7 +24,8 @@ import math
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from meta_filter.paired_test import (
+from meta_filter.core.schemas import CandidateEvaluation
+from meta_filter.gate.paired_test import (
     PairedStats,
     cluster_bootstrap_z,
     critical_b,
@@ -32,7 +33,6 @@ from meta_filter.paired_test import (
     paired_stats,
     z_threshold_for,
 )
-from meta_filter.schemas import CandidateEvaluation
 
 logger = logging.getLogger(__name__)
 

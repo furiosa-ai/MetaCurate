@@ -17,10 +17,10 @@ from __future__ import annotations
 
 import json
 
-from meta_filter.criterion_stats import criterion_stability, render_criterion_stability
-from meta_filter.optimizer import _criterion_breakdown, _pair_misorder_examples
-from meta_filter.proposer import _format_pair_misorders
-from meta_filter.schemas import Decision, FilterDecision, Trajectory
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory
+from meta_filter.diagnostics.criterion_stats import criterion_stability, render_criterion_stability
+from meta_filter.loop.optimizer import _criterion_breakdown, _pair_misorder_examples
+from meta_filter.propose.proposer import _format_pair_misorders
 from tests.selection_gate_fixture import TRUTH_POLICY
 from tests.test_promotion_rescore_is_canonical import TRUTH_POLICY_RESTATED, _llm_optimizer
 

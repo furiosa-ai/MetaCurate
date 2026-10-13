@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from meta_filter.probe import (
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory, Turn
+from meta_filter.loop.probe import (
     ProbeSet,
     append_report,
     flip_rate,
@@ -10,8 +11,7 @@ from meta_filter.probe import (
     load_reports,
     render_for_prompt,
 )
-from meta_filter.schemas import Decision, FilterDecision, Trajectory, Turn
-from meta_filter.trajectory import dump_trajectories
+from meta_filter.visibility.trajectory import dump_trajectories
 
 
 def _traj(instance: str, attempt: int = 0, resolved: bool = False, host: str = "host-local"):
@@ -157,7 +157,7 @@ def test_render_for_prompt_truncates_to_budget_keeping_newest():
 
 
 def test_fixed_validation_pairs_deterministic_and_capped() -> None:
-    from meta_filter.probe import fixed_validation_pairs
+    from meta_filter.loop.probe import fixed_validation_pairs
 
     ids = [f"t{i}" for i in range(30)]
     a = fixed_validation_pairs(ids, n_pairs=50, seed=4242)
@@ -168,7 +168,7 @@ def test_fixed_validation_pairs_deterministic_and_capped() -> None:
 
 
 def test_fixed_validation_pairs_small_universe_returns_all() -> None:
-    from meta_filter.probe import fixed_validation_pairs
+    from meta_filter.loop.probe import fixed_validation_pairs
 
     pairs = fixed_validation_pairs(["a", "b", "c"], n_pairs=100)
     assert pairs == [("a", "b"), ("a", "c"), ("b", "c")]

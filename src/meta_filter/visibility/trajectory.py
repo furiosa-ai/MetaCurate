@@ -6,14 +6,14 @@ import json
 from collections.abc import Iterable
 from pathlib import Path
 
-from meta_filter.metadata_free import strip_row
-from meta_filter.schemas import Trajectory
+from meta_filter.core.schemas import Trajectory
+from meta_filter.visibility.metadata_free import strip_row
 
 
 def load_trajectories(path: str | Path) -> list[Trajectory]:
     """Load trajectories from a JSONL file, stripped. Empty lines are ignored.
 
-    Every row goes through `meta_filter.metadata_free.strip_row` before it
+    Every row goes through `meta_filter.visibility.metadata_free.strip_row` before it
     becomes a `Trajectory`: only the allow-listed metadata keys survive and
     instance-bearing ids are pseudonymized. This is the one place that
     happens, so nothing built from the returned list can see what was

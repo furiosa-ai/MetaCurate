@@ -22,11 +22,13 @@ from pathlib import Path
 import pytest
 import yaml
 
+from meta_filter.core.llm_scorer import _criterion_cache_key
+from meta_filter.core.schemas import Trajectory
+from meta_filter.gate.pair_judge import PAIR_METADATA_LINE, PAIR_PROMPT, PairJudge, _meta_line
 from meta_filter.llm.base import LLMResponse
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
 from meta_filter.llm.mock import MockLLMClient
-from meta_filter.llm_scorer import _criterion_cache_key
-from meta_filter.metadata_free import (
+from meta_filter.visibility.metadata_free import (
     KEPT_METADATA_FIELDS,
     METADATA_FREE_TRAIN_FILE,
     filter_outcome_reads,
@@ -34,10 +36,8 @@ from meta_filter.metadata_free import (
     selection_set_view,
     strip_row,
 )
-from meta_filter.pair_judge import PAIR_METADATA_LINE, PAIR_PROMPT, PairJudge, _meta_line
-from meta_filter.schemas import Trajectory
-from meta_filter.trajectory import load_trajectories
-from meta_filter.view_policy import (
+from meta_filter.visibility.trajectory import load_trajectories
+from meta_filter.visibility.view_policy import (
     SCORER_BASELINE_FIELDS,
     absent_field_signature,
     field_set_signature,
@@ -166,7 +166,7 @@ def test_the_nemotron_pool_loads_unchanged(tmp_path):
 
 
 def test_the_probe_set_is_stripped_too(tmp_path):
-    from meta_filter.probe import ProbeSet
+    from meta_filter.loop.probe import ProbeSet
 
     pool = write_jsonl(tmp_path / "probe.jsonl", [dsv4pro_row("p0", 0)])
     probe = ProbeSet.from_path(pool)
@@ -239,7 +239,7 @@ def test_the_whole_pair_prompt_of_stripped_rows_carries_nothing_but_the_null_lin
 
 
 def _filter(root: Path, *, rules: str = "", rubric: str = "", policy: str = "") -> Path:
-    from meta_filter.filter_loader import materialize_candidate
+    from meta_filter.core.filter_loader import materialize_candidate
 
     materialize_candidate(
         root,
@@ -255,7 +255,7 @@ def _filter(root: Path, *, rules: str = "", rubric: str = "", policy: str = "") 
 
 
 def _check(candidate: Path, initial: Path):
-    from meta_filter.constraints import check_candidate
+    from meta_filter.gate.constraints import check_candidate
 
     return check_candidate(candidate, baseline_dir=initial, initial_dir=initial)
 
@@ -309,7 +309,7 @@ def test_the_non_blank_seed_names_no_label_anywhere():
 
 
 def test_the_non_blank_seed_fires_the_same_way_on_both_pools():
-    from meta_filter.filter_loader import load_filter
+    from meta_filter.core.filter_loader import load_filter
 
     loaded = load_filter(REPO / NONBLANK_SEED)
     dsv4 = _traj(strip_row(dsv4pro_row()))
@@ -321,7 +321,7 @@ def test_the_non_blank_seed_fires_the_same_way_on_both_pools():
 
 
 def test_a_seed_that_names_an_outcome_is_refused_before_the_run_builds_anything(tmp_path):
-    from meta_filter.optimizer import OptimizerConfig
+    from meta_filter.loop.optimizer import OptimizerConfig
 
     pool = write_jsonl(tmp_path / "train.jsonl", [dsv4pro_row("t0", 0)])
     selection = write_jsonl(tmp_path / "sel.jsonl", [dsv4pro_row("s0", 0)])
@@ -398,7 +398,7 @@ def test_the_trajectory_critic_keys_the_stripped_row_apart(tmp_path):
 
 
 def _provenance(rows: Path, **extra) -> dict:
-    from meta_filter.metadata_free import file_sha256
+    from meta_filter.visibility.metadata_free import file_sha256
 
     return {"rows_file": str(rows), "rows_sha256": file_sha256(rows), **extra}
 
@@ -425,7 +425,7 @@ def test_a_labelled_set_is_refused_from_a_cwd_that_lacks_its_rows_file(tmp_path,
     from typer.testing import CliRunner
 
     from meta_filter.cli import app
-    from meta_filter.selection_set import SelectionSet
+    from meta_filter.gate.selection_set import SelectionSet
 
     rows = [dsv4pro_row(f"s{i}", i) for i in range(6)]
     stripped = write_jsonl(tmp_path / "stripped.jsonl", [strip_row(r) for r in rows])
@@ -465,10 +465,10 @@ def test_a_labelled_set_is_refused_from_a_cwd_that_lacks_its_rows_file(tmp_path,
 
 
 def _optimizer(tmp_path, *, train, config, initial=None, **kw):
-    from meta_filter.optimizer import Optimizer
-    from meta_filter.selector import Selector
-    from meta_filter.solver import HeuristicRubricScorer, Solver
-    from meta_filter.validator import Validator
+    from meta_filter.core.solver import HeuristicRubricScorer, Solver
+    from meta_filter.gate.selector import Selector
+    from meta_filter.gate.validator import Validator
+    from meta_filter.loop.optimizer import Optimizer
     from tests.selection_gate_fixture import ScriptedProposer
 
     return Optimizer(
@@ -488,7 +488,7 @@ def _optimizer(tmp_path, *, train, config, initial=None, **kw):
 
 
 def _labelled_selection(tmp_path: Path) -> tuple[Path, Path, Path]:
-    from meta_filter.selection_set import SelectionSet
+    from meta_filter.gate.selection_set import SelectionSet
 
     train = write_jsonl(tmp_path / "train.jsonl", [dsv4pro_row(f"t{i}", i) for i in range(6)])
     rows = [dsv4pro_row(f"s{i}", i) for i in range(6)]
@@ -504,7 +504,7 @@ def _labelled_selection(tmp_path: Path) -> tuple[Path, Path, Path]:
 
 
 def _selection_config(selection: Path, prebuilt: Path, **kw):
-    from meta_filter.optimizer import OptimizerConfig
+    from meta_filter.loop.optimizer import OptimizerConfig
 
     return OptimizerConfig(
         iterations=1,
@@ -517,7 +517,7 @@ def _selection_config(selection: Path, prebuilt: Path, **kw):
 
 
 def test_the_optimizer_refuses_a_label_visible_prebuilt_selection_set(tmp_path):
-    from meta_filter.filter_loader import load_filter
+    from meta_filter.core.filter_loader import load_filter
 
     train, selection, prebuilt = _labelled_selection(tmp_path)
     optimizer = _optimizer(tmp_path, train=train, config=_selection_config(selection, prebuilt))
@@ -526,9 +526,9 @@ def test_the_optimizer_refuses_a_label_visible_prebuilt_selection_set(tmp_path):
 
 
 def test_rejudge_selection_judges_the_same_pairs_on_stripped_rows(tmp_path):
-    from meta_filter.filter_loader import load_filter
-    from meta_filter.selection_set import SelectionSet, selection_set_path
-    from meta_filter.validator import Validator
+    from meta_filter.core.filter_loader import load_filter
+    from meta_filter.gate.selection_set import SelectionSet, selection_set_path
+    from meta_filter.gate.validator import Validator
     from tests.selection_gate_fixture import Backend
 
     train, selection, prebuilt = _labelled_selection(tmp_path)
@@ -544,7 +544,7 @@ def test_rejudge_selection_judges_the_same_pairs_on_stripped_rows(tmp_path):
     saved = SelectionSet.load(selection_set_path(optimizer.store.run_dir))
     assert saved.provenance["metadata_free"] is True
     assert saved.provenance["rejudged_from"] == str(prebuilt)
-    from meta_filter.metadata_free import pseudonymize_selection_set
+    from meta_filter.visibility.metadata_free import pseudonymize_selection_set
 
     original = pseudonymize_selection_set(SelectionSet.load(prebuilt))
     asked = {frozenset(p) for p in [*saved.pairs, *saved.tied, *saved.unresolved]}
@@ -864,7 +864,7 @@ def test_a_mock_cli_run_shows_no_llm_an_outcome_field(tmp_path, monkeypatch):
         assert "resolved_mean" not in ranking.read_text(encoding="utf-8"), ranking
     cfg = yaml.safe_load((run_dir / "config.yaml").read_text(encoding="utf-8"))
     assert cfg["train_data"] == str(run_dir / METADATA_FREE_TRAIN_FILE)
-    from meta_filter.metadata_free import file_sha256
+    from meta_filter.visibility.metadata_free import file_sha256
 
     assert cfg["train_data_source_sha256"] == file_sha256(pools["train"])
     assert str(pools["train"]) not in (run_dir / "config.yaml").read_text(encoding="utf-8")
@@ -964,12 +964,12 @@ class _ScriptedAgent(ClaudeCodeHeadlessClient):
 
 
 def _agentic_optimizer(tmp_path, *, reads=(), iterations=1, run_id="mfa"):
-    from meta_filter.agentic_proposer import AgenticProposer
+    from meta_filter.core.llm_scorer import LLMRubricScorer
+    from meta_filter.core.solver import Solver
     from meta_filter.critics.trajectory_critic import TrajectoryCritic
-    from meta_filter.llm_scorer import LLMRubricScorer
-    from meta_filter.optimizer import OptimizerConfig
-    from meta_filter.solver import Solver
-    from meta_filter.validator import Validator
+    from meta_filter.gate.validator import Validator
+    from meta_filter.loop.optimizer import OptimizerConfig
+    from meta_filter.propose.agentic_proposer import AgenticProposer
 
     pools = _pools(tmp_path)
     run_dir = tmp_path / "runs" / run_id
@@ -1076,7 +1076,7 @@ def test_build_ranking_subset_names_its_pool_and_superset_explicitly():
 
 
 def test_build_selection_set_can_rejudge_an_existing_sets_pairs(tmp_path):
-    from meta_filter.selection_set import SelectionSet
+    from meta_filter.gate.selection_set import SelectionSet
     from scripts.build_selection_set import build
 
     _, selection, prebuilt = _labelled_selection(tmp_path)
@@ -1089,7 +1089,7 @@ def test_build_selection_set_can_rejudge_an_existing_sets_pairs(tmp_path):
         out=tmp_path / "nometa.json",
         pairs_from=prebuilt,
     )
-    from meta_filter.metadata_free import pseudonymize_selection_set
+    from meta_filter.visibility.metadata_free import pseudonymize_selection_set
 
     source = pseudonymize_selection_set(SelectionSet.load(prebuilt))
     asked = {frozenset(p) for p in [*out.pairs, *out.tied, *out.unresolved]}
@@ -1116,7 +1116,7 @@ CELL_CAP = "rubric_criteria=9,rule_count=13,rules_loc=522,rubric_chars=8785"
 def test_the_cells_cap_equals_one_and_a_half_times_the_reference_breakdown():
     import math
 
-    from meta_filter.constraints import ConstraintLimits, parse_complexity_ceiling
+    from meta_filter.gate.constraints import ConstraintLimits, parse_complexity_ceiling
 
     limits = ConstraintLimits.DEFAULT
     expected = {
@@ -1135,7 +1135,7 @@ def test_the_numeric_cap_refuses_exactly_what_the_multiple_refused(tmp_path):
 
     import math
 
-    from meta_filter.constraints import ConstraintLimits, parse_complexity_ceiling
+    from meta_filter.gate.constraints import ConstraintLimits, parse_complexity_ceiling
 
     caps = parse_complexity_ceiling(CELL_CAP)
     ratio = ConstraintLimits.DEFAULT.hard_ratio
@@ -1146,7 +1146,7 @@ def test_the_numeric_cap_refuses_exactly_what_the_multiple_refused(tmp_path):
 
 
 def test_check_candidate_applies_the_numeric_cap(tmp_path):
-    from meta_filter.constraints import check_candidate
+    from meta_filter.gate.constraints import check_candidate
 
     initial = _filter(tmp_path / "initial")
     rubric = "# Rubric\n" + "".join(f"\n## Criterion: C{i}\n+2 good.\n" for i in range(3))
@@ -1168,7 +1168,7 @@ def test_check_candidate_applies_the_numeric_cap(tmp_path):
     "bad", ["rubric_criteria", "policy_loc=5", "rules_loc=x", "nope=3", "rule_count=-1"]
 )
 def test_a_malformed_cap_is_refused(bad):
-    from meta_filter.constraints import parse_complexity_ceiling
+    from meta_filter.gate.constraints import parse_complexity_ceiling
 
     with pytest.raises(ValueError):
         parse_complexity_ceiling(bad)
@@ -1209,7 +1209,7 @@ def test_the_interpreter_is_the_only_outside_read_allowed(tmp_path):
     import sys
 
     from meta_filter.llm.codex_cli import CodexResponse
-    from meta_filter.optimizer import MetadataFreeReadError
+    from meta_filter.loop.optimizer import MetadataFreeReadError
 
     optimizer, *_ = _agentic_optimizer(tmp_path)
     ok = CodexResponse(text="", reads_outside_workspace=(sys.executable,))
@@ -1226,7 +1226,7 @@ def test_the_interpreter_is_the_only_outside_read_allowed(tmp_path):
 def test_instance_bearing_ids_are_pseudonymized_and_nemotron_ids_are_not(tmp_path):
     import hashlib
 
-    from meta_filter.metadata_free import PSEUDONYM_SALT, pseudonym_map, pseudonymize_id
+    from meta_filter.visibility.metadata_free import PSEUDONYM_SALT, pseudonym_map, pseudonymize_id
 
     raw = "owner__repo-12::att2"
     expected = "traj_" + hashlib.sha256((PSEUDONYM_SALT + raw).encode()).hexdigest()[:16]

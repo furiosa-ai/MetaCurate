@@ -108,7 +108,7 @@ run refuses it at boot.
 
 ## How the loop keeps outcomes out
 
-Implemented in `src/meta_filter/metadata_free.py`:
+Implemented in `src/meta_filter/visibility/metadata_free.py`:
 
 * **Strip at load.** `load_trajectories` keeps only the metadata keys on an
   allow-list — `source`, `dataset`, `license`, `submission`,

@@ -12,7 +12,7 @@ import math
 
 import pytest
 
-from meta_filter.paired_test import (
+from meta_filter.gate.paired_test import (
     CRITICAL_B_TABLE_NS,
     EXACT_BINOMIAL_BELOW,
     PairedStats,

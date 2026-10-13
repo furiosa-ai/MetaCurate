@@ -27,7 +27,7 @@ from pathlib import Path
 from meta_filter.critics.rubric_critic import RUBRIC_CRITIC_SYSTEM, RubricCritic
 from meta_filter.critics.trajectory_critic import JUDGE_SYSTEM, TrajectoryCritic
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
-from meta_filter.trajectory import Trajectory
+from meta_filter.visibility.trajectory import Trajectory
 
 logger = logging.getLogger(__name__)
 

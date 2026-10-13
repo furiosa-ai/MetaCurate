@@ -349,7 +349,7 @@ def _section_inputs(section: str, declared: Iterable[str]) -> set[str]:
     they are absent.
     """
 
-    from meta_filter.view_policy import METADATA_REF_RE
+    from meta_filter.visibility.view_policy import METADATA_REF_RE
 
     fields = set(declared) | set(METADATA_REF_RE.findall(section))
     lowered = section.lower()
@@ -381,8 +381,8 @@ def dead_axis_reasons(
     removes them. A reason is what makes the line actionable.
     """
 
-    from meta_filter.llm_scorer import _split_rubric_sections
-    from meta_filter.view_policy import declared_fields
+    from meta_filter.core.llm_scorer import _split_rubric_sections
+    from meta_filter.visibility.view_policy import declared_fields
 
     dead = list(dead)
     if not dead:

@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from meta_filter.metrics import compute_metrics, scalar_loss
-from meta_filter.schemas import Decision, FilterDecision, Trajectory
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory
+from meta_filter.gate.metrics import compute_metrics, scalar_loss
 
 
 def _traj(id_: str) -> Trajectory:

@@ -15,10 +15,10 @@ from pathlib import Path
 
 import pytest
 
+from meta_filter.core.llm_scorer import LLMRubricScorer, _criterion_cache_key
+from meta_filter.core.schemas import Trajectory
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
 from meta_filter.llm.cost_meter import LEDGER, MeteredClient
-from meta_filter.llm_scorer import LLMRubricScorer, _criterion_cache_key
-from meta_filter.schemas import Trajectory
 from scripts.build_ranking_subset import build_parser, build_scorer_client, main
 
 # The loop's solver model in the four run cells, and the suffix its cached

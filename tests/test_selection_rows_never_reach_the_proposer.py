@@ -15,9 +15,13 @@ from pathlib import Path
 
 import pytest
 
+from meta_filter.core.llm_scorer import sanitize_trajectory_id
+from meta_filter.gate.selection_set import (
+    SelectionSet,
+    selection_row_ids_in_text,
+    selection_set_path,
+)
 from meta_filter.llm.base import LLMResponse
-from meta_filter.llm_scorer import sanitize_trajectory_id
-from meta_filter.selection_set import SelectionSet, selection_row_ids_in_text, selection_set_path
 from tests.selection_gate_fixture import (
     TRAIN_ONLY_POLICY,
     TRUTH_POLICY,

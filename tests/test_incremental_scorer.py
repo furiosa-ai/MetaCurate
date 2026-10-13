@@ -21,13 +21,13 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from meta_filter.llm.base import LLMResponse
-from meta_filter.llm_scorer import (
+from meta_filter.core.llm_scorer import (
     LLMRubricScorer,
     _split_rubric_sections,
 )
-from meta_filter.schemas import Trajectory
-from meta_filter.solver import ScorerCost
+from meta_filter.core.schemas import Trajectory
+from meta_filter.core.solver import ScorerCost
+from meta_filter.llm.base import LLMResponse
 
 RUBRIC_V1 = """\
 # Rubric

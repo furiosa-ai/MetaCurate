@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from meta_filter.memory import RegressionMemory
-from meta_filter.schemas import CounterExample, Decision, Trajectory
+from meta_filter.core.schemas import CounterExample, Decision, Trajectory
+from meta_filter.gate.memory import RegressionMemory
 
 
 def _ce(id_: str, kind: str, gold: Decision) -> CounterExample:

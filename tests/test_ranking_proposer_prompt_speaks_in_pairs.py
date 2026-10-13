@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import pytest
 
-from meta_filter.agentic_proposer import _agentic_instructions
+from meta_filter.propose.agentic_proposer import _agentic_instructions
 from tests.proposer_prompt_fixture import render
 
 # Every one of these names something the loop does not compute, or names a

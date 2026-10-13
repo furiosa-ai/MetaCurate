@@ -22,18 +22,18 @@ from __future__ import annotations
 
 import json
 
-from meta_filter.optimizer import (
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory, Turn
+from meta_filter.loop.optimizer import (
     MAX_PAIR_MISORDER_RECORDS,
     _audit_blind_spot_pairs,
     _pair_misorder_examples,
     _select_misordered_pairs,
 )
-from meta_filter.proposer import (
+from meta_filter.propose.proposer import (
     MISORDER_BLOCK_BUDGET,
     PROMPT_MISORDER_PAIRS,
     _format_pair_misorders,
 )
-from meta_filter.schemas import Decision, FilterDecision, Trajectory, Turn
 from tests.selection_gate_fixture import (
     BASELINE_POLICY,
     build_optimizer,

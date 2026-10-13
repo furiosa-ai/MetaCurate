@@ -34,10 +34,10 @@ from collections.abc import Iterable
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from meta_filter.core.rendering import render_submission, render_turns, view_signature
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory
 from meta_filter.llm.base import LLMClient
-from meta_filter.rendering import render_submission, render_turns, view_signature
-from meta_filter.schemas import Decision, FilterDecision, Trajectory
-from meta_filter.view_policy import pair_view_signature
+from meta_filter.visibility.view_policy import pair_view_signature
 
 logger = logging.getLogger(__name__)
 

@@ -5,7 +5,7 @@ from __future__ import annotations
 import difflib
 from pathlib import Path
 
-from meta_filter.schemas import CandidateEvaluation
+from meta_filter.core.schemas import CandidateEvaluation
 
 # Written verbatim into diff.md when the baseline survived an iteration. The
 # viewer matches on it to say "nothing changed" without rendering an empty card.

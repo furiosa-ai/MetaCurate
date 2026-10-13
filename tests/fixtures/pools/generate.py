@@ -32,9 +32,9 @@ import random
 import tempfile
 from pathlib import Path
 
+from meta_filter.gate.pair_judge import PairJudge
+from meta_filter.gate.selection_set import SelectionSet
 from meta_filter.llm.mock import MockLLMClient
-from meta_filter.pair_judge import PairJudge
-from meta_filter.selection_set import SelectionSet
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]

@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-from meta_filter.pair_judge import PairResolution
-from meta_filter.schemas import Decision, FilterDecision, Trajectory, Turn
-from meta_filter.selection_set import (
+from meta_filter.core.schemas import Decision, FilterDecision, Trajectory, Turn
+from meta_filter.gate.pair_judge import PairResolution
+from meta_filter.gate.selection_set import (
     SELECTION_SET_FILE,
     SelectionSet,
     assert_disjoint,
@@ -77,7 +77,7 @@ def test_universe_no_larger_than_n_is_returned_whole():
 
 
 def test_without_scores_the_draw_is_uniform_and_matches_the_probe_convention():
-    from meta_filter.probe import fixed_validation_pairs
+    from meta_filter.loop.probe import fixed_validation_pairs
 
     ids = _ids(25)
     ours = build_selection_pairs(ids, n_pairs=60, seed=4242)

@@ -18,16 +18,16 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.filter_loader import load_filter
-from meta_filter.llm.base import LLMResponse
-from meta_filter.llm_scorer import (
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.llm_scorer import (
     LLMRubricScorer,
     _criterion_cache_key,
     criterion_field_sets,
 )
-from meta_filter.pair_judge import PAIR_METADATA_LINE, _meta_line
-from meta_filter.schemas import Trajectory
-from meta_filter.view_policy import (
+from meta_filter.core.schemas import Trajectory
+from meta_filter.gate.pair_judge import PAIR_METADATA_LINE, _meta_line
+from meta_filter.llm.base import LLMResponse
+from meta_filter.visibility.view_policy import (
     FIELD_CAPS,
     PAIR_JUDGE_FIELDS,
     SCORER_BASELINE_FIELDS,

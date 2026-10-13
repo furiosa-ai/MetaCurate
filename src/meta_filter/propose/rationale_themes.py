@@ -366,7 +366,7 @@ def criterion_coverage(rubric_md: str, criteria: Sequence[str]) -> dict[str, lis
     criterion.
     """
 
-    from meta_filter.llm_scorer import _split_rubric_sections
+    from meta_filter.core.llm_scorer import _split_rubric_sections
 
     criteria = list(criteria)
     if not criteria:

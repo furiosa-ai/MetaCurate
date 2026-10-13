@@ -29,14 +29,13 @@ from pathlib import Path
 
 import yaml
 
-from meta_filter.filter_loader import materialize_candidate
+from meta_filter.core.filter_loader import materialize_candidate
+from meta_filter.core.llm_scorer import LLMRubricScorer
 from meta_filter.llm.agent_guard import ENV_ALLOW, bash_violations, build_guard_settings
 from meta_filter.llm.base import LLMResponse
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
 from meta_filter.llm.codex_cli import CodexCliClient
 from meta_filter.llm.mock import MockLLMClient
-from meta_filter.llm_scorer import LLMRubricScorer
-from meta_filter.pseudonym import Pseudonymizer
 from meta_filter.score_tool import (
     LEDGER_FILENAME,
     STAGING_DIRNAME,
@@ -49,7 +48,8 @@ from meta_filter.score_tool import (
     score_criterion,
     staging_dir_for,
 )
-from meta_filter.trajectory import load_trajectories
+from meta_filter.visibility.pseudonym import Pseudonymizer
+from meta_filter.visibility.trajectory import load_trajectories
 from tests.selection_gate_fixture import (
     RULES,
     TRUTH_POLICY,
@@ -621,7 +621,7 @@ def test_without_the_tool_the_optimizer_writes_no_ledger(tmp_path):
 
 
 def test_config_yaml_records_the_solver_the_tool_needs(tmp_path):
-    from meta_filter.solver import Solver
+    from meta_filter.core.solver import Solver
 
     run = prepare(tmp_path)
     optimizer = build_optimizer(
@@ -700,8 +700,8 @@ def test_the_claude_guard_allows_the_tool_interpreter_and_nothing_else(tmp_path)
 
 
 def test_with_tools_sets_exactly_the_hole_each_harness_has(tmp_path):
-    from meta_filter.agentic_proposer import _with_tools
     from meta_filter.llm.cost_meter import metered, unwrap
+    from meta_filter.propose.agentic_proposer import _with_tools
 
     access = ScoreToolAccess(
         command="/v/bin/python -m meta_filter.score_tool --run-dir /r",
@@ -740,11 +740,11 @@ def test_the_optimizer_arms_the_tool_for_an_agentic_proposer_over_an_llm_scorer(
     """The one configuration where the tool can work is the one it is
     advertised in: a tool-using proposer and an LLM scorer."""
 
-    from meta_filter.agentic_proposer import AgenticProposer
-    from meta_filter.optimizer import Optimizer, OptimizerConfig
-    from meta_filter.selector import Selector
-    from meta_filter.solver import Solver
-    from meta_filter.validator import Validator
+    from meta_filter.core.solver import Solver
+    from meta_filter.gate.selector import Selector
+    from meta_filter.gate.validator import Validator
+    from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+    from meta_filter.propose.agentic_proposer import AgenticProposer
     from tests.selection_gate_fixture import Backend
 
     run = prepare(tmp_path)
@@ -783,7 +783,7 @@ def test_the_optimizer_arms_the_tool_for_an_agentic_proposer_over_an_llm_scorer(
 def _fake_cell(cache_root: Path, trajectory_id: str, criterion: str, score: float) -> Path:
     """A per-criterion cell file named as the scorer names it."""
 
-    from meta_filter.llm_scorer import sanitize_trajectory_id
+    from meta_filter.core.llm_scorer import sanitize_trajectory_id
 
     target = cache_root / "per_criterion"
     target.mkdir(parents=True, exist_ok=True)
@@ -905,7 +905,7 @@ def test_the_optimizer_merges_the_staged_cells_after_each_leg(tmp_path, caplog):
 
 
 def test_an_armed_codex_client_lists_no_writable_root(tmp_path):
-    from meta_filter.agentic_proposer import _with_tools
+    from meta_filter.propose.agentic_proposer import _with_tools
 
     access = access_for(tmp_path / "run", budget_usd=1.5)
     codex = _with_tools(

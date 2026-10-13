@@ -12,8 +12,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS
-from meta_filter.proposer import PROPOSER_SYSTEM, build_proposer_system
+from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS
+from meta_filter.propose.proposer import PROPOSER_SYSTEM, build_proposer_system
 
 
 def test_the_objective_is_stated_as_maximization():
@@ -80,7 +80,7 @@ def test_the_prompt_names_the_actual_floor_and_the_actual_penalty():
     terms. A proposer told only "zeroed" can read the guard as a cap worth
     trading a little spread against."""
 
-    from meta_filter.ranking import DEGENERACY_PENALTY
+    from meta_filter.gate.ranking import DEGENERACY_PENALTY
 
     prompt = build_proposer_system(min_distinct_levels=3)
 
@@ -105,12 +105,12 @@ def test_an_unstated_floor_drops_the_paragraph_rather_than_guessing_one():
 def test_the_optimizer_hands_over_the_floor_it_will_apply(tmp_path):
     """The prompt and the selector must not be able to name different numbers."""
 
-    from meta_filter.optimizer import Optimizer, OptimizerConfig
-    from meta_filter.proposer import Proposer
-    from meta_filter.ranking import default_min_distinct_levels
-    from meta_filter.selector import Selector
-    from meta_filter.solver import HeuristicRubricScorer, Solver
-    from meta_filter.validator import Validator
+    from meta_filter.core.solver import HeuristicRubricScorer, Solver
+    from meta_filter.gate.ranking import default_min_distinct_levels
+    from meta_filter.gate.selector import Selector
+    from meta_filter.gate.validator import Validator
+    from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+    from meta_filter.propose.proposer import Proposer
 
     root = Path(__file__).resolve().parents[1]
     optimizer = Optimizer(
@@ -132,11 +132,11 @@ def test_the_optimizer_hands_over_the_floor_it_will_apply(tmp_path):
 
 
 def test_an_explicit_floor_overrides_the_pool_derived_one(tmp_path):
-    from meta_filter.optimizer import Optimizer, OptimizerConfig
-    from meta_filter.proposer import Proposer
-    from meta_filter.selector import Selector
-    from meta_filter.solver import HeuristicRubricScorer, Solver
-    from meta_filter.validator import Validator
+    from meta_filter.core.solver import HeuristicRubricScorer, Solver
+    from meta_filter.gate.selector import Selector
+    from meta_filter.gate.validator import Validator
+    from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+    from meta_filter.propose.proposer import Proposer
 
     root = Path(__file__).resolve().parents[1]
     optimizer = Optimizer(

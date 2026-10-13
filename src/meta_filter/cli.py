@@ -25,30 +25,30 @@ import typer
 import yaml
 from rich.console import Console
 
-from meta_filter.agentic_proposer import AgenticProposer
 from meta_filter.analysis.filter_evolution import analyze_run
-from meta_filter.concurrency import DEFAULT_PER_CALL_GB, AdaptiveGovernor, log_plan
-from meta_filter.constraints import FROZEN_FILES, parse_complexity_ceiling, parse_freeze
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.llm_scorer import LLMRubricScorer
+from meta_filter.core.solver import HeuristicRubricScorer, Solver
 from meta_filter.critics import TrajectoryCritic
 from meta_filter.critics.agentic import AgenticTrajectoryCritic
-from meta_filter.filter_loader import load_filter
+from meta_filter.gate.constraints import FROZEN_FILES, parse_complexity_ceiling, parse_freeze
+from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS, compute_metrics
+from meta_filter.gate.selection_set import ALL_PAIRS, PairCount, SelectionSet, assert_disjoint
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
 from meta_filter.llm import build_client
 from meta_filter.llm.cost_meter import metered
-from meta_filter.llm_scorer import LLMRubricScorer
-from meta_filter.metadata_free import (
+from meta_filter.loop.concurrency import DEFAULT_PER_CALL_GB, AdaptiveGovernor, log_plan
+from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+from meta_filter.propose.agentic_proposer import AgenticProposer
+from meta_filter.propose.proposer import Proposer
+from meta_filter.visibility.metadata_free import (
     filter_outcome_reads,
     pseudonymize_id,
     pseudonymize_selection_set,
     selection_set_view,
 )
-from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS, compute_metrics
-from meta_filter.optimizer import Optimizer, OptimizerConfig
-from meta_filter.proposer import Proposer
-from meta_filter.selection_set import ALL_PAIRS, PairCount, SelectionSet, assert_disjoint
-from meta_filter.selector import Selector
-from meta_filter.solver import HeuristicRubricScorer, Solver
-from meta_filter.trajectory import load_trajectories
-from meta_filter.validator import Validator
+from meta_filter.visibility.trajectory import load_trajectories
 
 app = typer.Typer(add_completion=False, no_args_is_help=True, help=__doc__)
 console = Console()
@@ -522,7 +522,7 @@ def run(
 
     Every pool (train, validation, probe, selection) is stripped at load to
     the transcript, the submitted diff and a few process counts
-    (`meta_filter.metadata_free`); no component of the loop sees a harness
+    (`meta_filter.visibility.metadata_free`); no component of the loop sees a harness
     outcome.
     """
 

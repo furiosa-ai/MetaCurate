@@ -18,10 +18,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from meta_filter.optimizer import MAX_PAIR_MISORDER_RECORDS
-from meta_filter.pair_dump import ranking_pair_rows, write_ranking_pairs
-from meta_filter.pseudonym import Pseudonymizer
-from meta_filter.schemas import Trajectory, Turn
+from meta_filter.core.schemas import Trajectory, Turn
+from meta_filter.loop.optimizer import MAX_PAIR_MISORDER_RECORDS
+from meta_filter.propose.pair_dump import ranking_pair_rows, write_ranking_pairs
+from meta_filter.visibility.pseudonym import Pseudonymizer
 from tests.test_critic_evidence_is_judge_derived import _ranking_run
 
 
@@ -128,7 +128,7 @@ def test_the_prompt_pair_cap_is_untouched(tmp_path):
     flat line on all of them.
     """
 
-    from meta_filter.proposer import _format_pair_misorders
+    from meta_filter.propose.proposer import _format_pair_misorders
     from tests.proposer_prompt_fixture import a_pair
 
     run_dir = _ranking_run(tmp_path)
@@ -153,7 +153,7 @@ def test_the_file_is_written_once_before_scoring_and_once_after(tmp_path, monkey
     about the verdicts it just paid for.
     """
 
-    import meta_filter.pair_dump as pair_dump
+    import meta_filter.propose.pair_dump as pair_dump
 
     writes: list[tuple[int, bool]] = []
     original = pair_dump.write_ranking_pairs

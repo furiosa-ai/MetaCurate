@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.criterion_stats import criterion_stats, render_criterion_health
+from meta_filter.diagnostics.criterion_stats import criterion_stats, render_criterion_health
 from tests.selection_gate_fixture import RUBRIC, RULES, build_optimizer, prepare
 from tests.test_candidate_gating import INVERTED_NOISY_POLICY, RichProposer
 
@@ -112,7 +112,7 @@ def test_the_themes_block_is_written_and_shown(tmp_path, monkeypatch):
     """The mock judge's rationales match no theme, so the block is empty in
     the run above; this drives the renderer directly instead."""
 
-    import meta_filter.rationale_themes as rt
+    import meta_filter.propose.rationale_themes as rt
 
     monkeypatch.setattr(rt, "rationale_themes", lambda *a, **k: {"themes": ["x"]})
     monkeypatch.setattr(rt, "render_rationale_themes", lambda report: "THEMES BLOCK")

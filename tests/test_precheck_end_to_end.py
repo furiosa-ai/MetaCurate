@@ -13,12 +13,12 @@ import json
 import shutil
 from pathlib import Path
 
+from meta_filter.core.solver import HeuristicRubricScorer, Solver
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
 from meta_filter.llm.base import LLMResponse
-from meta_filter.optimizer import Optimizer, OptimizerConfig
-from meta_filter.proposer import Proposer, ProposerResult
-from meta_filter.selector import Selector
-from meta_filter.solver import HeuristicRubricScorer, Solver
-from meta_filter.validator import Validator
+from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+from meta_filter.propose.proposer import Proposer, ProposerResult
 from tests.demo_pool import selection_rows
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -182,7 +182,7 @@ def test_the_proposer_is_shown_the_parent_to_compare_against(tmp_path):
 def test_a_proposer_that_declines_the_leg_is_recorded_as_one_leg(tmp_path):
     """The static proposer has no workspace, so there is nothing to revise."""
 
-    from meta_filter.proposer import Proposer
+    from meta_filter.propose.proposer import Proposer
 
     class _Declining(_TwoLegProposer):
         revise = Proposer.revise

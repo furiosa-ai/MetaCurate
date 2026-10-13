@@ -14,7 +14,7 @@ from functools import partial  # noqa: E402
 
 import pytest  # noqa: E402
 
-import meta_filter.optimizer as optimizer_module  # noqa: E402
+import meta_filter.loop.optimizer as optimizer_module  # noqa: E402
 from meta_filter.critics import RubricCritic, RuleCritic  # noqa: E402
 
 

@@ -18,10 +18,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from meta_filter.filter_loader import LoadedFilter
-from meta_filter.schemas import Decision, Trajectory
-from meta_filter.solver import Solver
-from meta_filter.trajectory import load_trajectories
+from meta_filter.core.filter_loader import LoadedFilter
+from meta_filter.core.schemas import Decision, Trajectory
+from meta_filter.core.solver import Solver
+from meta_filter.visibility.trajectory import load_trajectories
 
 PROBE_SUBDIR = "probe"
 PROBE_DECISIONS_FILE = "probe_decisions.jsonl"

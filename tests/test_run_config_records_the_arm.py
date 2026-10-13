@@ -13,11 +13,11 @@ from pathlib import Path
 
 import yaml
 
-from meta_filter.optimizer import Optimizer, OptimizerConfig
-from meta_filter.proposer import Proposer, ProposerResult
-from meta_filter.selector import Selector
-from meta_filter.solver import HeuristicRubricScorer, Solver
-from meta_filter.validator import Validator
+from meta_filter.core.solver import HeuristicRubricScorer, Solver
+from meta_filter.gate.selector import Selector
+from meta_filter.gate.validator import Validator
+from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+from meta_filter.propose.proposer import Proposer, ProposerResult
 from tests.demo_pool import IdJudgeBackend, selection_rows
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -93,7 +93,7 @@ def test_defaults_are_recorded_too_not_only_overrides(tmp_path):
 
     cfg = _written_config(tmp_path, OptimizerConfig(iterations=1, candidates_per_iteration=1))
 
-    from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS
+    from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS
 
     assert cfg["score_weights"] == DEFAULT_SCORE_WEIGHTS
     assert cfg["max_pairs"] == 4000

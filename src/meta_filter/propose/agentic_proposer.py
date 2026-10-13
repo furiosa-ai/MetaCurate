@@ -22,10 +22,10 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import ClassVar
 
-from meta_filter.complexity import measure_filter_complexity
-from meta_filter.filter_loader import load_filter
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.gate.complexity import measure_filter_complexity
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
-from meta_filter.proposer import (
+from meta_filter.propose.proposer import (
     Proposer,
     ProposerResult,
     _write_rationale_md,
@@ -359,7 +359,7 @@ must be trustworthy among the strong rows, among the weak rows, and in the
 middle."""
 
 
-# What the rows carry (`meta_filter.metadata_free`). It describes what the
+# What the rows carry (`meta_filter.visibility.metadata_free`). It describes what the
 # rows DO carry and names nothing else: naming the outcome fields to say they
 # are missing would re-introduce, by name, exactly what the strip took out,
 # and a proposer told a field exists writes criteria that read it.

@@ -14,8 +14,8 @@ import pytest
 import typer
 import yaml
 
-from meta_filter.pair_judge import PairJudge
-from meta_filter.selection_set import SelectionSet, selection_set_path
+from meta_filter.gate.pair_judge import PairJudge
+from meta_filter.gate.selection_set import SelectionSet, selection_set_path
 from scripts import build_selection_set as bss
 from tests.selection_gate_fixture import (
     TRUTH_POLICY,

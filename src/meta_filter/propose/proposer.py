@@ -28,21 +28,21 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
-from meta_filter.complexity import measure_filter_complexity
-from meta_filter.constraints import FROZEN_FILES, ConstraintLimits, hypothesis_lines
-from meta_filter.criterion_stats import UNREAD_TAG_MARK
-from meta_filter.filter_loader import (
+from meta_filter.core.filter_loader import (
     LoadedFilter,
     load_filter,
     materialize_candidate,
 )
+from meta_filter.core.schemas import CandidateEvaluation, CounterExample, FilterMetrics
+from meta_filter.diagnostics.criterion_stats import UNREAD_TAG_MARK
+from meta_filter.gate.complexity import measure_filter_complexity
+from meta_filter.gate.constraints import FROZEN_FILES, ConstraintLimits, hypothesis_lines
+from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS
+from meta_filter.gate.ranking import DEGENERACY_PENALTY
 from meta_filter.llm.base import LLMClient, LLMResponse
 from meta_filter.llm.mock import MockLLMClient
-from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS
-from meta_filter.pseudonym import Pseudonymizer
-from meta_filter.ranking import DEGENERACY_PENALTY
-from meta_filter.schemas import CandidateEvaluation, CounterExample, FilterMetrics
 from meta_filter.score_tool import ScoreToolAccess
+from meta_filter.visibility.pseudonym import Pseudonymizer
 
 if TYPE_CHECKING:  # pragma: no cover - typing only
     pass
@@ -668,7 +668,7 @@ class Proposer:
     client: LLMClient = field(default_factory=MockLLMClient)
     n_candidates: int = 3
     temperature: float = 0.4
-    # Set by the Optimizer for agentic runs. See meta_filter.pseudonym.
+    # Set by the Optimizer for agentic runs. See meta_filter.visibility.pseudonym.
     pseudonymizer: Pseudonymizer | None = None
     # Set by the Optimizer: the run's initial filter counts, which the
     # edit-discipline block prints the hard caps and floors against. None

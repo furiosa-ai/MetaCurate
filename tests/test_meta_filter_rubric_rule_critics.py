@@ -8,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+from meta_filter.core.schemas import Decision, Trajectory, Turn
 from meta_filter.critics import (
     RubricCritic,
     RubricCriticReport,
@@ -17,7 +18,6 @@ from meta_filter.critics._shared import CRITIC_PREAMBLE
 from meta_filter.critics.rubric_critic import RUBRIC_CRITIC_SYSTEM
 from meta_filter.critics.rule_critic import RULE_CRITIC_SYSTEM
 from meta_filter.llm.base import LLMResponse
-from meta_filter.schemas import Decision, Trajectory, Turn
 
 
 @dataclass

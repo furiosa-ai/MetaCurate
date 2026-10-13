@@ -24,14 +24,14 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter.llm.base import LLMResponse
-from meta_filter.llm_scorer import (
+from meta_filter.core.llm_scorer import (
     PARSE_ATTEMPTS,
     LLMRubricScorer,
     ScorerParseError,
     _parse_scorer_response,
 )
-from meta_filter.schemas import Trajectory
+from meta_filter.core.schemas import Trajectory
+from meta_filter.llm.base import LLMResponse
 
 RUBRIC = """\
 # Rubric

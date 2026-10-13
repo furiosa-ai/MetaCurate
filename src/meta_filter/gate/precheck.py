@@ -43,9 +43,22 @@ from collections.abc import Collection, Iterable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from meta_filter import ranking as ranking_math
-from meta_filter.complexity import measure_filter_complexity
-from meta_filter.constraints import (
+from meta_filter.core.filter_loader import LoadedFilter, load_filter
+from meta_filter.core.llm_scorer import (
+    _rubric_header,
+    _split_rubric_sections,
+    criterion_field_sets,
+)
+from meta_filter.core.schemas import FilterMetrics, Trajectory
+from meta_filter.core.solver import Solver
+from meta_filter.diagnostics.criterion_stats import (
+    charge_redundancy,
+    criterion_stats,
+    redundancy_penalty,
+)
+from meta_filter.gate import ranking as ranking_math
+from meta_filter.gate.complexity import measure_filter_complexity
+from meta_filter.gate.constraints import (
     ConstraintLimits,
     ConstraintReport,
     assess_rubric_health,
@@ -54,24 +67,11 @@ from meta_filter.constraints import (
     record_rule_firing,
     rubric_criteria_defect_of,
 )
-from meta_filter.criterion_stats import (
-    charge_redundancy,
-    criterion_stats,
-    redundancy_penalty,
-)
-from meta_filter.filter_loader import LoadedFilter, load_filter
+from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
+from meta_filter.gate.paired_test import pair_correctness
 from meta_filter.llm.cost_meter import LEDGER as COST_LEDGER
 from meta_filter.llm.cost_meter import CostLedger, RoleCost
-from meta_filter.llm_scorer import (
-    _rubric_header,
-    _split_rubric_sections,
-    criterion_field_sets,
-)
-from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
-from meta_filter.paired_test import pair_correctness
-from meta_filter.schemas import FilterMetrics, Trajectory
-from meta_filter.solver import Solver
-from meta_filter.view_policy import (
+from meta_filter.visibility.view_policy import (
     absent_field_signature,
     field_set_signature,
     scorer_key_fields,
@@ -1029,7 +1029,7 @@ def run_precheck(
     dead axis or redundant pair raises its bar the way a soft cap does.
     """
 
-    from meta_filter.agentic_proposer import _match_notes
+    from meta_filter.propose.agentic_proposer import _match_notes
 
     tied = list(tied_pairs)
     rows = list(trajectories_by_id.values())

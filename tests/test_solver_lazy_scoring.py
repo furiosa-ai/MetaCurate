@@ -14,9 +14,9 @@ import logging
 
 import pytest
 
-from meta_filter.filter_loader import load_filter
-from meta_filter.schemas import Decision, Trajectory, Turn
-from meta_filter.solver import ScorerCost, Solver
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.schemas import Decision, Trajectory, Turn
+from meta_filter.core.solver import ScorerCost, Solver
 
 RUBRIC = "# Rubric\n\n## Task Grounding\n\n## Error Recovery\n"
 

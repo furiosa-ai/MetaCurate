@@ -69,8 +69,8 @@ import logging
 import statistics
 from collections.abc import Iterable, Mapping
 
-from meta_filter.criterion_stats import DEAD_MODAL_SHARE
-from meta_filter.view_policy import METADATA_REF_RE, declared_fields, fields_for
+from meta_filter.diagnostics.criterion_stats import DEAD_MODAL_SHARE
+from meta_filter.visibility.view_policy import METADATA_REF_RE, declared_fields, fields_for
 
 logger = logging.getLogger(__name__)
 
@@ -100,7 +100,7 @@ def check(
     """Criteria that cannot be scored, with whatever cause is legible.
 
     `criterion_stats` is the per-candidate diagnostic block from
-    `meta_filter.criterion_stats.criterion_stats` (it may be None when too
+    `meta_filter.diagnostics.criterion_stats.criterion_stats` (it may be None when too
     few rows carried rubric scores).
 
     Returns one record per finding, most-degenerate first. Empty is the normal
@@ -110,7 +110,7 @@ def check(
     # Imported here, not at module scope, so there is exactly one section
     # splitter in the project: a second copy would drift from the one the
     # cache keys are built on, which is the class of bug this file exists for.
-    from meta_filter.llm_scorer import _split_rubric_sections
+    from meta_filter.core.llm_scorer import _split_rubric_sections
 
     criteria = list(criteria)
     if not criteria:

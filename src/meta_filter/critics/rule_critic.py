@@ -30,6 +30,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from meta_filter.core.schemas import Decision, Trajectory
 from meta_filter.critics import rule_design
 from meta_filter.critics._shared import CRITIC_PREAMBLE, load_cache
 from meta_filter.critics.rule_design import (
@@ -38,7 +39,6 @@ from meta_filter.critics.rule_design import (
     DesignReview,
 )
 from meta_filter.llm.base import LLMClient
-from meta_filter.schemas import Decision, Trajectory
 
 logger = logging.getLogger(__name__)
 

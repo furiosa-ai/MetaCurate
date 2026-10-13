@@ -18,9 +18,9 @@ all-present case. This is the same idea, finally applied to the scorer.
 
 from __future__ import annotations
 
-from meta_filter.llm_scorer import _criterion_cache_key
-from meta_filter.trajectory import Trajectory
-from meta_filter.view_policy import absent_field_signature, field_set_signature
+from meta_filter.core.llm_scorer import _criterion_cache_key
+from meta_filter.visibility.trajectory import Trajectory
+from meta_filter.visibility.view_policy import absent_field_signature, field_set_signature
 
 DECLARED = ("resolved", "f2p_pass", "exit_status")
 LABELLED = {"resolved": True, "f2p_pass": True, "exit_status": "submitted"}

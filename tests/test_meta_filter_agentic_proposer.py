@@ -7,11 +7,11 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from meta_filter.agentic_proposer import AgenticProposer
-from meta_filter.filter_loader import load_filter, materialize_candidate
+from meta_filter.core.filter_loader import load_filter, materialize_candidate
+from meta_filter.core.schemas import FilterMetrics
 from meta_filter.llm.base import LLMResponse
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
-from meta_filter.schemas import FilterMetrics
+from meta_filter.propose.agentic_proposer import AgenticProposer
 
 GOOD_RULES = "def rule_one(t):\n    return None\n"
 GOOD_POLICY = "def decide(*a, **k):\n    return {'decision': 'REVIEW'}\n"
@@ -282,7 +282,7 @@ def test_the_static_proposer_declines_the_revision_leg(tmp_path):
     """It answers from its prompt alone; there is no workspace to revise in."""
 
     from meta_filter.llm.base import LLMResponse as _R
-    from meta_filter.proposer import Proposer, ProposerResult
+    from meta_filter.propose.proposer import Proposer, ProposerResult
 
     result = ProposerResult(prompt="p", response=_R(text="{}"), candidate_dirs=[])
     same = Proposer().revise(

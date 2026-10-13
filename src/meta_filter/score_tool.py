@@ -72,19 +72,19 @@ from typing import Any
 
 import yaml
 
-from meta_filter.filter_loader import load_filter
-from meta_filter.llm.cost_meter import CostLedger, MeteredClient
-from meta_filter.llm.pricing import list_price_usd
-from meta_filter.llm_scorer import (
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.llm_scorer import (
     LLMRubricScorer,
     _split_rubric_sections,
     cache_key_trajectory_id,
     sanitize_trajectory_id,
 )
-from meta_filter.pair_dump import FILENAME as RANKING_PAIRS_FILENAME
-from meta_filter.rendering import render_submission, render_turns
-from meta_filter.schemas import Trajectory
-from meta_filter.trajectory import load_trajectories
+from meta_filter.core.rendering import render_submission, render_turns
+from meta_filter.core.schemas import Trajectory
+from meta_filter.llm.cost_meter import CostLedger, MeteredClient
+from meta_filter.llm.pricing import list_price_usd
+from meta_filter.propose.pair_dump import FILENAME as RANKING_PAIRS_FILENAME
+from meta_filter.visibility.trajectory import load_trajectories
 
 logger = logging.getLogger(__name__)
 
@@ -168,7 +168,7 @@ def staging_dir_for(run_dir: Path) -> Path:
 class IdMap:
     """The run's pseudonym map, read from beside the runs rather than inside.
 
-    `meta_filter.pseudonym` gives every pool row a per-run `traj_<8 hex>`
+    `meta_filter.visibility.pseudonym` gives every pool row a per-run `traj_<8 hex>`
     name and the optimizer writes both directions to
     `<runs_dir>/_idmap/<run_id>.json`. Everything the proposer reads — the
     prompt, `critic_outputs/`, `ranking_pairs.jsonl` — carries the pseudonym
@@ -262,7 +262,7 @@ class StagedRubricScorer(LLMRubricScorer):
             return staged
         if trajectory.trajectory_id not in self.train_ids:
             return None
-        from meta_filter.llm_scorer import _criterion_cache_key
+        from meta_filter.core.llm_scorer import _criterion_cache_key
 
         key = _criterion_cache_key(section_text, criterion, trajectory, model, field_sig, header)
         path = Path(self.run_cache_dir) / "per_criterion" / f"{key}.json"
@@ -564,7 +564,7 @@ def _criteria_for(rubric_path: Path, criterion: str) -> tuple[list[str], str]:
         except Exception as exc:  # noqa: BLE001 — a half-written candidate is normal here
             logger.warning("could not import %s (%s); splitting on headings", policy, exc)
     if not criteria:
-        from meta_filter.constraints import criterion_names
+        from meta_filter.gate.constraints import criterion_names
 
         criteria = criterion_names(rubric_path)
     note = ""

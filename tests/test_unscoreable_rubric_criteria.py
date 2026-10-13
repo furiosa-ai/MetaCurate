@@ -25,9 +25,9 @@ from pathlib import Path
 
 import pytest
 
-from meta_filter import constraints as cx
-from meta_filter.filter_loader import load_filter, materialize_candidate
-from meta_filter.precheck import render_precheck_block, run_precheck
+from meta_filter.core.filter_loader import load_filter, materialize_candidate
+from meta_filter.gate import constraints as cx
+from meta_filter.gate.precheck import render_precheck_block, run_precheck
 from tests.selection_gate_fixture import (
     BASELINE_POLICY,
     RUBRIC,

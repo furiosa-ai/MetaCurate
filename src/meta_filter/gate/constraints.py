@@ -35,8 +35,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import ClassVar, Literal
 
-from meta_filter.complexity import DEFAULT_COMPLEXITY_COEFFICIENTS, measure_filter_complexity
-from meta_filter.criterion_stats import REDUNDANT_RHO, dead_axes, redundant_pairs
+from meta_filter.diagnostics.criterion_stats import REDUNDANT_RHO, dead_axes, redundant_pairs
+from meta_filter.gate.complexity import DEFAULT_COMPLEXITY_COEFFICIENTS, measure_filter_complexity
 
 logger = logging.getLogger(__name__)
 
@@ -480,7 +480,7 @@ def _declared_criteria(filter_dir: Path) -> tuple[str, ...] | None:
     """`RUBRIC_CRITERIA` as declared, or None when it cannot be read."""
 
     try:
-        from meta_filter.filter_loader import load_filter
+        from meta_filter.core.filter_loader import load_filter
 
         declared = getattr(load_filter(Path(filter_dir)).policy_module, "RUBRIC_CRITERIA", None)
     except Exception:
@@ -1840,7 +1840,7 @@ def check_candidate(
     # The rubric included and no initial-filter exemption: the rows carry no
     # outcome field, so any read of one is either dead code or an attempt to
     # recover what the strip removed.
-    from meta_filter.metadata_free import filter_outcome_reads
+    from meta_filter.visibility.metadata_free import filter_outcome_reads
 
     for filename, names in filter_outcome_reads(candidate_dir).items():
         fire(

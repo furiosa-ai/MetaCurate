@@ -32,11 +32,11 @@ import re
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from meta_filter.concurrency import max_concurrent_calls
+from meta_filter.core.rendering import render_submission, render_turns
 from meta_filter.llm.claude_code import ClaudeCodeHeadlessClient
-from meta_filter.metadata_free import pseudonym_map
-from meta_filter.rendering import render_submission, render_turns
-from meta_filter.trajectory import load_trajectories
+from meta_filter.loop.concurrency import max_concurrent_calls
+from meta_filter.visibility.metadata_free import pseudonym_map
+from meta_filter.visibility.trajectory import load_trajectories
 
 logger = logging.getLogger("score_pool_baseline")
 

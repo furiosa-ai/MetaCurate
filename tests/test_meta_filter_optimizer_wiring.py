@@ -7,21 +7,21 @@ they exercise the small helper surface where regressions are most likely
 
 from __future__ import annotations
 
-from meta_filter.critics import TrajectoryCritic
-from meta_filter.critics.trajectory_critic import TrajectoryVerdict
-from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
-from meta_filter.optimizer import (
-    OptimizerConfig,
-    _candidate_workers,
-    _tiny_histogram,
-)
-from meta_filter.schemas import (
+from meta_filter.core.schemas import (
     CandidateEvaluation,
     Decision,
     FilterDecision,
     FilterMetrics,
     Trajectory,
     Turn,
+)
+from meta_filter.critics import TrajectoryCritic
+from meta_filter.critics.trajectory_critic import TrajectoryVerdict
+from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
+from meta_filter.loop.optimizer import (
+    OptimizerConfig,
+    _candidate_workers,
+    _tiny_histogram,
 )
 
 
@@ -188,11 +188,11 @@ def test_build_curated_evidence_handles_string_fn_fp(tmp_path):
     import os
     from pathlib import Path
 
-    from meta_filter.optimizer import Optimizer, OptimizerConfig
-    from meta_filter.proposer import Proposer
-    from meta_filter.selector import Selector
-    from meta_filter.solver import HeuristicRubricScorer, Solver
-    from meta_filter.validator import Validator
+    from meta_filter.core.solver import HeuristicRubricScorer, Solver
+    from meta_filter.gate.selector import Selector
+    from meta_filter.gate.validator import Validator
+    from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+    from meta_filter.propose.proposer import Proposer
 
     root = Path(__file__).resolve().parents[1]
     proposer = Proposer(client=_MinimalStub(), n_candidates=1)
@@ -239,11 +239,11 @@ def test_build_curated_evidence_handles_string_fn_fp(tmp_path):
 def _build_optimizer(tmp_path, *, agentic: bool):
     from pathlib import Path
 
-    from meta_filter.optimizer import Optimizer, OptimizerConfig
-    from meta_filter.proposer import Proposer
-    from meta_filter.selector import Selector
-    from meta_filter.solver import HeuristicRubricScorer, Solver
-    from meta_filter.validator import Validator
+    from meta_filter.core.solver import HeuristicRubricScorer, Solver
+    from meta_filter.gate.selector import Selector
+    from meta_filter.gate.validator import Validator
+    from meta_filter.loop.optimizer import Optimizer, OptimizerConfig
+    from meta_filter.propose.proposer import Proposer
 
     root = Path(__file__).resolve().parents[1]
     return Optimizer(

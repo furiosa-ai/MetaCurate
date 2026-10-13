@@ -5,18 +5,8 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 
-from meta_filter.complexity import measure_filter_complexity
-from meta_filter.critics import (
-    BoundaryCritic,
-    CriticBackend,
-    PrecisionCritic,
-    RecallCritic,
-    StaticVerdictBackend,
-)
-from meta_filter.filter_loader import LoadedFilter
-from meta_filter.memory import RegressionMemory
-from meta_filter.metrics import compute_metrics, scalar_loss
-from meta_filter.schemas import (
+from meta_filter.core.filter_loader import LoadedFilter
+from meta_filter.core.schemas import (
     CandidateEvaluation,
     CounterExample,
     Decision,
@@ -24,7 +14,17 @@ from meta_filter.schemas import (
     FilterMetrics,
     Trajectory,
 )
-from meta_filter.solver import HeuristicRubricScorer, Solver
+from meta_filter.core.solver import HeuristicRubricScorer, Solver
+from meta_filter.critics import (
+    BoundaryCritic,
+    CriticBackend,
+    PrecisionCritic,
+    RecallCritic,
+    StaticVerdictBackend,
+)
+from meta_filter.gate.complexity import measure_filter_complexity
+from meta_filter.gate.memory import RegressionMemory
+from meta_filter.gate.metrics import compute_metrics, scalar_loss
 
 
 @dataclass

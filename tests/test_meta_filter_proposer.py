@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from meta_filter.filter_loader import load_filter
+from meta_filter.core.filter_loader import load_filter
+from meta_filter.core.schemas import FilterMetrics
 from meta_filter.llm import build_client
-from meta_filter.proposer import PROPOSER_INSTRUCTIONS, PROPOSER_SYSTEM, Proposer
-from meta_filter.schemas import FilterMetrics
+from meta_filter.propose.proposer import PROPOSER_INSTRUCTIONS, PROPOSER_SYSTEM, Proposer
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -78,7 +78,7 @@ def test_proposer_can_modify_all_three_files(tmp_path):
     proposer = Proposer(client=build_client("mock", seed=1), n_candidates=3)
     # Emulate a situation where the mock proposer produces varied edits by
     # bumping the observed FN/FP counters in the prompt state.
-    from meta_filter.schemas import CounterExample, Decision, Trajectory
+    from meta_filter.core.schemas import CounterExample, Decision, Trajectory
 
     fake_fn = [
         CounterExample(

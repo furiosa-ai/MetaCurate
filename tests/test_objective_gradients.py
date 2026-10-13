@@ -15,9 +15,9 @@ from __future__ import annotations
 
 import pytest
 
+from meta_filter.core.schemas import FilterMetrics
 from meta_filter.critics.rule_critic import RuleStats, _aggregate_quality
-from meta_filter.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
-from meta_filter.schemas import FilterMetrics
+from meta_filter.gate.metrics import DEFAULT_SCORE_WEIGHTS, compute_score
 
 
 def _metrics(**over):
