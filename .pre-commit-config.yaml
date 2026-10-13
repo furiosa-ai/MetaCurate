@@ -3,10 +3,12 @@
 exclude: ^(filters/|tests/fixtures/)
 
 repos:
+  # Keep rev equal to the ruff in uv.lock: 0.9.7 and 0.15.5 disagree on blank
+  # lines, so `make format` output failed this hook in CI.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.7
+    rev: v0.15.5
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: [--fix]
       - id: ruff-format
 
