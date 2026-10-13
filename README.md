@@ -1,5 +1,9 @@
 # MetaCurate
 
+[Project page](https://furiosa-air.github.io/metacurate/) ·
+Dataset on Hugging Face (coming soon)
+<!-- TODO: link the Hugging Face dataset here when it is published. -->
+
 MetaCurate evolves a curation filter for selecting SFT data from coding-agent
 trajectories, using pairwise LLM judgments. A filter is a set of rules, an
 LLM-scored rubric, and a policy that combines them into one score per
