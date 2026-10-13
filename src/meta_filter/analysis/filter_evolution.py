@@ -93,7 +93,7 @@ def _iteration_selected_filter(iter_dir: Path) -> Path | None:
 
 
 def analyze_run(run_dir: str | Path) -> dict:
-    """Return a structured analysis report (also renders as text in __str__)."""
+    """Return a structured analysis report as a plain dict."""
 
     run_dir = Path(run_dir)
     iterations_root = run_dir / "iterations"

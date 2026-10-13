@@ -1221,7 +1221,7 @@ class Optimizer:
                     consecutive_proposer_failures += 1
                 continue
 
-            # 2b. PRECHECK + the one revision leg (fix #9). Between writing
+            # 2b. PRECHECK + the one revision leg. Between writing
             #     candidates and paying to score them, the loop can already
             #     say what each one scores: the truth pairs from earlier
             #     iterations are judged, and every criterion the candidate
@@ -2188,7 +2188,7 @@ class Optimizer:
             )
 
             selected = next(b for b in bundles if b[0] == result.winner)
-            _, selected_dir, selected_is_baseline, selected_loaded, selected_bundle = selected
+            _, selected_dir, selected_is_baseline, _, selected_bundle = selected
 
             # Patience bookkeeping. A proposer failure never reaches this
             # line (its `continue` is above), so those iterations leave the

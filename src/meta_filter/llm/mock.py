@@ -362,7 +362,7 @@ def _tweak_policy_thresholds(policy_src: str, direction: str) -> tuple[str, str]
     """Return (new_src, note). direction ∈ {'less_review', 'more_review',
     'stricter_reject', 'looser_reject'}. If nothing matches, return unchanged."""
 
-    def _replace_number(pattern: str, current_range, new_value: str) -> str | None:
+    def _replace_number(pattern: str, new_value: str) -> str | None:
         m = re.search(pattern, policy_src)
         if not m:
             return None
@@ -376,16 +376,16 @@ def _tweak_policy_thresholds(policy_src: str, direction: str) -> tuple[str, str]
 
     if direction == "less_review":
         # Lower REVIEW_LOWER makes more decisions confident.
-        new_src = _replace_number(r"REVIEW_LOWER\s*=\s*([\d.]+)", None, "0.20")
+        new_src = _replace_number(r"REVIEW_LOWER\s*=\s*([\d.]+)", "0.20")
         note = "policy: lower REVIEW_LOWER band to reduce hedging."
     elif direction == "more_review":
-        new_src = _replace_number(r"REVIEW_LOWER\s*=\s*([\d.]+)", None, "0.35")
+        new_src = _replace_number(r"REVIEW_LOWER\s*=\s*([\d.]+)", "0.35")
         note = "policy: raise REVIEW_LOWER to push borderline decisions into REVIEW."
     elif direction == "stricter_reject":
-        new_src = _replace_number(r"REJECT_MARGIN\s*=\s*(\d+)", None, "1")
+        new_src = _replace_number(r"REJECT_MARGIN\s*=\s*(\d+)", "1")
         note = "policy: tighten REJECT_MARGIN to reject more aggressively."
     elif direction == "looser_reject":
-        new_src = _replace_number(r"REJECT_MARGIN\s*=\s*(\d+)", None, "3")
+        new_src = _replace_number(r"REJECT_MARGIN\s*=\s*(\d+)", "3")
         note = "policy: relax REJECT_MARGIN so borderline rubric doesn't reject."
     else:
         new_src = None
@@ -495,21 +495,12 @@ def _generate_candidates(state: dict, seed: int) -> list[dict]:
         )
     )
     for direction in ("less_review", "more_review", "stricter_reject", "looser_reject"):
-
-        def _make_op(dir_=direction):
-            new_policy, note = _tweak_policy_thresholds(policy_src, dir_)
-            return (rubric, rules_src, new_policy), note
-
-        (rp, note0) = _make_op()
+        new_policy, note = _tweak_policy_thresholds(policy_src, direction)
         catalog.append(
             (
-                bool(note0),
-                note0 or f"policy: {direction}",
-                lambda dir_=direction: (
-                    rubric,
-                    rules_src,
-                    _tweak_policy_thresholds(policy_src, dir_)[0],
-                ),
+                bool(note),
+                note or f"policy: {direction}",
+                lambda new_policy=new_policy: (rubric, rules_src, new_policy),
             )
         )
 

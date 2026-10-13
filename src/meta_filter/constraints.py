@@ -1768,9 +1768,14 @@ def check_candidate(
         # arithmetic that bound: `initial - allowance`, or the absolute
         # minimum when the initial filter was too small for the allowance.
         floor = limits.floor_for(name, init)
-        if floor is not None and _inert_removals(
-            name, Path(baseline_dir), candidate_dir, zero_lift_criteria, zero_lift_rules
-        ):
+        inert = (
+            _inert_removals(
+                name, Path(baseline_dir), candidate_dir, zero_lift_criteria, zero_lift_rules
+            )
+            if floor is not None
+            else 0
+        )
+        if inert:
             # A criterion the harness MEASURED as moving the ordering by
             # exactly zero is not discriminating power the floor is there to
             # protect — it is a scorer call per row buying nothing. Removing
@@ -1796,13 +1801,7 @@ def check_candidate(
             # crediting only criteria would write a cheque the rule floor
             # bounces — and since the removal rides in EVERY candidate, that
             # bounce would invalidate a whole iteration.
-            floor = max(
-                0,
-                floor
-                - _inert_removals(
-                    name, Path(baseline_dir), candidate_dir, zero_lift_criteria, zero_lift_rules
-                ),
-            )
+            floor = max(0, floor - inert)
         if floor is not None and value < floor:
             allowance = limits.deletion_floor[name]
             if floor == max(0, init - allowance):

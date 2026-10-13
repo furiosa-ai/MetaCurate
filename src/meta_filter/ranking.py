@@ -194,10 +194,7 @@ def truth_pairs(
             hi, lo = (a, b) if signs == {1} else (b, a)
             consensus.append((hi, lo))
         else:
-            pair_mean = sum(
-                (scores_by_candidate[c][a] + scores_by_candidate[c][b]) / 2 for c in candidates
-            ) / len(candidates)
-            disagreements.append(((a, b), pair_mean))
+            disagreements.append(((a, b), _pair_mean(scores_by_candidate, candidates, a, b)))
 
     # Two strata, one budget, split by design rather than by circumstance.
     #

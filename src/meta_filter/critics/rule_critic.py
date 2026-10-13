@@ -31,7 +31,7 @@ from pathlib import Path
 from typing import Any
 
 from meta_filter.critics import rule_design
-from meta_filter.critics._shared import CRITIC_PREAMBLE
+from meta_filter.critics._shared import CRITIC_PREAMBLE, load_cache
 from meta_filter.critics.rule_design import (
     RULE_SCORE_PROMPT,
     RULE_SCORE_SYSTEM,
@@ -263,7 +263,7 @@ class RuleCritic:
             + "|metadata_free",
         )
         cache_path = self.cache_dir / f"design_{cache_key}.json"
-        cached = _load_cache(cache_path)
+        cached = load_cache(cache_path)
         if cached is not None:
             review = rule_design.parse(cached.get("raw", ""))
         else:
@@ -323,7 +323,7 @@ class RuleCritic:
             self.model_tag,
         )
         cache_path = self.cache_dir / f"{cache_key}.json"
-        cached = _load_cache(cache_path)
+        cached = load_cache(cache_path)
         if cached is not None:
             report.recommendations = cached.get("recommendations", [])
             report.signals_missing_from_rules = cached.get("signals_missing_from_rules", [])
@@ -540,16 +540,6 @@ def _hash_inputs(
         ).encode()
     )
     return h.hexdigest()[:16]
-
-
-def _load_cache(path: Path) -> dict[str, Any] | None:
-    if not path.exists():
-        return None
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        logger.warning("bad cache entry at %s, will re-query", path)
-        return None
 
 
 def _parse_llm_report(text: str) -> dict[str, Any]:

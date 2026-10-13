@@ -22,7 +22,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from meta_filter.critics._shared import CRITIC_PREAMBLE
+from meta_filter.critics._shared import CRITIC_PREAMBLE, load_cache
 from meta_filter.llm.base import LLMClient
 
 logger = logging.getLogger(__name__)
@@ -120,7 +120,7 @@ class RubricCritic:
         )
         cache_key = _hash_inputs(rubric_md, curated_evidence, self.model_tag)
         cache_path = self.cache_dir / f"{cache_key}.json"
-        cached = _load_cache(cache_path)
+        cached = load_cache(cache_path)
         if cached is not None:
             return RubricCriticReport(
                 rubric_quality=cached["rubric_quality"],
@@ -179,16 +179,6 @@ def _hash_inputs(
     h.update(b"\0")
     h.update(json.dumps(curated_evidence, sort_keys=True, ensure_ascii=False).encode())
     return h.hexdigest()[:16]
-
-
-def _load_cache(path: Path) -> dict[str, Any] | None:
-    if not path.exists():
-        return None
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
-        logger.warning("bad cache entry at %s, will re-query", path)
-        return None
 
 
 def _parse_report(text: str) -> dict[str, Any]:

@@ -39,7 +39,7 @@ MALFORMED_RATE_MAX = 0.10
 
 NOTE_T = "[layer T] reads only the commands the agent issued and the diff it submitted"
 
-# --- Command canonicalizer (copied from rule_filter.py) ---------------------
+# --- Command canonicalizer ---------------------------------------------------
 
 _WRAPPER_HEADS = {"bash", "sh", "zsh", "env", "sudo", "time", "nohup", "xargs"}
 
@@ -175,7 +175,7 @@ def _commands(trajectory):
     return cmds, malformed, n_assistant
 
 
-# --- Per-command classification (copied from rule_filter.py) ----------------
+# --- Per-command classification ----------------------------------------------
 
 
 def _segment_tokens(cmd: str) -> list[str]:

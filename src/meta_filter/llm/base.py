@@ -100,3 +100,21 @@ def scrub_credentials(
         if name.startswith(prefixes) or _CREDENTIAL_NAME_RE.search(name):
             env.pop(name, None)
     return env
+
+
+def usage_limit_detail(body: str | None, markers: tuple[str, ...]) -> str:
+    """The cap sentence from a CLI failure body, or `""` if it is not a cap.
+
+    Returns the matched line rather than a bool so the run's last log line
+    carries the regain date the CLI reports, which is the one fact the reader
+    needs. Matching is case-insensitive.
+    """
+
+    body = body or ""
+    lowered = tuple(m.lower() for m in markers)
+    if not any(m in body.lower() for m in lowered):
+        return ""
+    for line in reversed(body.strip().splitlines()):
+        if any(m in line.lower() for m in lowered):
+            return line.strip()[:400]
+    return body.strip()[:400]
