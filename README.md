@@ -15,8 +15,7 @@
 
 <p align="center">
   <a href="https://furiosa-air.github.io/metacurate/"><img alt="Project" src="https://img.shields.io/static/v1?label=Project&message=Page&color=blue&logo=github-pages"></a>
-  <!-- TODO: link the arXiv abstract and change the message to the arXiv ID once the preprint is out. -->
-  <img alt="arXiv" src="https://img.shields.io/static/v1?label=arXiv&message=coming%20soon&color=lightgrey&logo=arxiv">
+  <a href="https://arxiv.org/abs/2610.23134"><img alt="arXiv" src="https://img.shields.io/static/v1?label=arXiv&message=2610.23134&color=b31b1b&logo=arxiv"></a>
   <!-- TODO: link the Hugging Face dataset and change the message to "Hugging Face" once it is published. -->
   <img alt="Dataset" src="https://img.shields.io/static/v1?label=Dataset&message=coming%20soon&color=lightgrey&logo=huggingface">
 </p>
@@ -92,13 +91,12 @@ uv run pytest
 
 ## Citation
 
-<!-- TODO: fill in the arXiv ID once the preprint is out. -->
 ```bibtex
 @article{kim2026metacurate,
   title   = {MetaCurate: Evolving Curation Filters for High-Quality Agentic Coding Data},
   author  = {Kim, Donghoon and Oh, Seunghyuk and Galim, Kevin and Kim, Minseo and
              Lee, Minjae and Kim, Younghyun and Seo, Wooseok and Koo, Hyung Il and Kang, Wonjun},
-  journal = {arXiv preprint arXiv:[ARXIV ID]},
+  journal = {arXiv preprint arXiv:2610.23134},
   year    = {2026}
 }
 ```
