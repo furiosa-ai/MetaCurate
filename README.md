@@ -16,8 +16,7 @@
 <p align="center">
   <a href="https://furiosa-air.github.io/metacurate/"><img alt="Project" src="https://img.shields.io/static/v1?label=Project&message=Page&color=blue&logo=github-pages"></a>
   <a href="https://arxiv.org/abs/2610.23134"><img alt="arXiv" src="https://img.shields.io/static/v1?label=arXiv&message=2610.23134&color=b31b1b&logo=arxiv"></a>
-  <!-- TODO: link the Hugging Face dataset and change the message to "Hugging Face" once it is published. -->
-  <img alt="Dataset" src="https://img.shields.io/static/v1?label=Dataset&message=coming%20soon&color=lightgrey&logo=huggingface">
+  <a href="https://huggingface.co/datasets/furiosa-ai/MetaCurate-DeepSeekV4Pro"><img alt="Dataset" src="https://img.shields.io/static/v1?label=Dataset&message=Hugging%20Face&color=ffd21e&logo=huggingface"></a>
 </p>
 
 MetaCurate evolves a curation filter for selecting SFT data from coding-agent
